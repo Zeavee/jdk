@@ -55,6 +55,7 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
 void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compressed, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
   jobject value = JNIHandles::make_local(obj());
+  MacroAssembler::patch_oop(pc, cast_from_oop<address>(obj()));
   int oop_index = _oop_recorder->find_index(value);
   RelocationHolder rspec = oop_Relocation::spec(oop_index);
   _instructions->relocate(pc, rspec);
@@ -63,12 +64,10 @@ void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compre
 void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCodeStream* stream, u1 tag, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
   if (tag == PATCH_NARROW_KLASS) {
-    narrowKlass narrowOop = record_narrow_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
+    fprintf(stderr, "This is inst narrow: %u\n", NativeInstruction::extract_opcode(pc));
     JVMCI_event_3("relocating (narrow metaspace constant) at " PTR_FORMAT "/0x%x", p2i(pc), narrowOop);
   } else {
-    NativeMovConstReg* move = nativeMovConstReg_at(pc);
-    void* reference = record_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
-    move->set_data((intptr_t) reference);
+    fprintf(stderr, "This is inst normal: %u\n", NativeInstruction::extract_opcode(pc));
     JVMCI_event_3("relocating (metaspace constant) at " PTR_FORMAT "/" PTR_FORMAT, p2i(pc), p2i(reference));
   }
 }
