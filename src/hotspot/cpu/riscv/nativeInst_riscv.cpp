@@ -104,13 +104,17 @@ bool NativeInstruction::is_li32_at(address instr) {
 
 bool NativeInstruction::is_li64_at(address instr) {
   return is_lui_at(instr) && // lui
-         is_addi_at(instr + instruction_size) && // addi
+         (is_addi_at(instr + instruction_size) ||
+          is_addiw_at(instr + instruction_size)) && // addi/addiw
          is_slli_shift_at(instr + instruction_size * 2, 12) &&  // Slli Rd, Rs, 12
-         is_addi_at(instr + instruction_size * 3) && // addi
+         (is_addi_at(instr + instruction_size * 3) ||
+          is_addiw_at(instr + instruction_size * 3)) && // addi/addiw
          is_slli_shift_at(instr + instruction_size * 4, 12) &&  // Slli Rd, Rs, 12
-         is_addi_at(instr + instruction_size * 5) && // addi
+         (is_addi_at(instr + instruction_size * 5) ||
+          is_addiw_at(instr + instruction_size * 5)) && // addi/addiw
          is_slli_shift_at(instr + instruction_size * 6, 8) &&   // Slli Rd, Rs, 8
-         is_addi_at(instr + instruction_size * 7) && // addi
+         (is_addi_at(instr + instruction_size * 7) ||
+          is_addiw_at(instr + instruction_size * 7)) && // addi/addiw
          check_li64_data_dependency(instr);
 }
 

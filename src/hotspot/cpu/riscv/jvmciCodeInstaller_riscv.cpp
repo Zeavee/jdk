@@ -63,11 +63,13 @@ void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compre
 
 void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCodeStream* stream, u1 tag, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
-  if (tag == PATCH_NARROW_KLASS) {
-    fprintf(stderr, "This is inst narrow: %u\n", NativeInstruction::extract_opcode(pc));
-  } else {
-    fprintf(stderr, "This is inst normal: %u\n", NativeInstruction::extract_opcode(pc));
+  for (int i = 0; i < 8; ++i) {
+    fprintf(stderr, "This is inst normal: %u\n", NativeInstruction::extract_opcode(pc + NativeInstruction::instruction_size * i));
   }
+  NativeMovConstReg* move = nativeMovConstReg_at(pc);
+  void* reference = record_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
+  move->set_data((intptr_t) reference);
+  JVMCI_event_3("relocating (metaspace constant) at " PTR_FORMAT "/" PTR_FORMAT, p2i(pc), p2i(reference));
 }
 
 void CodeInstaller::pd_patch_DataSectionReference(int pc_offset, int data_offset, JVMCI_TRAPS) {
