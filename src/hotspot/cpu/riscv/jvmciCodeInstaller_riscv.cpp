@@ -65,10 +65,8 @@ void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCod
   address pc = _instructions->start() + pc_offset;
   if (tag == PATCH_NARROW_KLASS) {
     fprintf(stderr, "This is inst narrow: %u\n", NativeInstruction::extract_opcode(pc));
-    JVMCI_event_3("relocating (narrow metaspace constant) at " PTR_FORMAT "/0x%x", p2i(pc), narrowOop);
   } else {
     fprintf(stderr, "This is inst normal: %u\n", NativeInstruction::extract_opcode(pc));
-    JVMCI_event_3("relocating (metaspace constant) at " PTR_FORMAT "/" PTR_FORMAT, p2i(pc), p2i(reference));
   }
 }
 
