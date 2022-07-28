@@ -86,7 +86,8 @@ bool NativeInstruction::is_load_pc_relative_at(address instr) {
 
 bool NativeInstruction::is_movptr_at(address instr) {
   return is_lui_at(instr) && // Lui
-         is_addi_at(instr + instruction_size) && // Addi
+         (is_addi_at(instr + instruction_size) ||
+          is_addiw_at(instr + instruction_size)) && // Addi/AddiW
          is_slli_shift_at(instr + instruction_size * 2, 11) && // Slli Rd, Rs, 11
          is_addi_at(instr + instruction_size * 3) && // Addi
          is_slli_shift_at(instr + instruction_size * 4, 6) && // Slli Rd, Rs, 6
