@@ -1980,7 +1980,7 @@ void SharedRuntime::generate_deopt_blob() {
     implicit_exception_uncommon_trap_offset = __ pc() - start;
 
     __ ld(x1, Address(tp, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
-    __ sd(x0, Address(tp, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
+    __ sd(zr, Address(tp, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
 
     uncommon_trap_offset = __ pc() - start;
 
@@ -1996,7 +1996,7 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ mvw(xcpool, (int32_t)Deoptimization::Unpack_reexecute);
     __ mv(c_rarg0, tp);
-    __ mvw(c_rarg2, xcpool); // exec mode
+    __ mv(c_rarg2, xcpool); // exec mode
     int32_t offset = 0;
     __ la_patchable(t0,
            RuntimeAddress(CAST_FROM_FN_PTR(address,
