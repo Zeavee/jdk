@@ -64,7 +64,7 @@ void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compre
 void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCodeStream* stream, u1 tag, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
   for (int i = 0; i < 8; ++i) {
-    fprintf(stderr, "This is inst normal: %u\n", NativeInstruction::extract_opcode(pc + NativeInstruction::instruction_size * i));
+    fprintf(stderr, "This is inst normal: %u and this is funct2 %u\n", NativeInstruction::extract_opcode(pc + NativeInstruction::instruction_size * i), NativeInstruction::extract_funct3(pc + NativeInstruction::instruction_size * i));
   }
   NativeMovConstReg* move = nativeMovConstReg_at(pc);
   void* reference = record_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
