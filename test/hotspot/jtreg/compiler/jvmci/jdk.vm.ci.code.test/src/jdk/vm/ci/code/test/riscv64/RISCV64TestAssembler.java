@@ -116,7 +116,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitLoadImmediate(Register Rd, int imm32) {
         emitLui(Rd, (imm32 >> 12) & 0xfffff);
-        emitAdd(Rd, Rd, imm32 & 0xfff);
+        emitAddW(Rd, Rd, imm32 & 0xfff);
     }
 
     private void emitLoadRegister(Register Rt, RISCV64Kind kind, Register Rn, int offset) {
@@ -258,7 +258,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitLoadPointer48(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
-        emitLoadImmediate(ret, (int) ((addr >> 16) & 0xffffffff));
+        emitLoadPointer32(ret, (int) ((addr >> 16) & 0xffffffff));
         emitShiftLeft(ret, ret, 11);
         emitAdd(ret, ret, (int) ((addr >> 5) & 0x7ff));
         emitShiftLeft(ret, ret, 5);
@@ -267,7 +267,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitLoadPointer32(Register ret, long addr) {
         emitLui(ret, (int) ((addr >> 12) & 0xfffff));
-        emitAddW(ret, ret, (int) (addr & 0xfff));
+        emitAdd(ret, ret, (int) (addr & 0xfff));
     }
 
     @Override
