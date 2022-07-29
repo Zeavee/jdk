@@ -334,7 +334,7 @@ void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArgu
 void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaCallArguments* args, TRAPS) {
 
   JavaThread* thread = THREAD;
-  char* mname = (char*) os::malloc(100);
+  char* mname = (char*) os::malloc(100, mtInternal);
   method->name_and_sig_as_C_string(mname, 100);
   fprintf(stderr, "This is method: %s and this is thread", mname);
   os::free(mname);
