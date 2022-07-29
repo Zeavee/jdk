@@ -289,6 +289,15 @@ class JavaThread: public Thread {
                                                  // only VM_Exit can set _vm_exited
   };
 
+  union {
+    // Communicates the pc at which the most recent implicit exception occurred
+    // from the signal handler to a deoptimization stub.
+    address   _implicit_exception_pc;
+
+    // Communicates an alternative call target to an i2c stub from a JavaCall .
+    address   _alternate_call_target;
+  } _jvmci;
+
  private:
   // In general a JavaThread's _terminated field transitions as follows:
   //
@@ -352,14 +361,6 @@ class JavaThread: public Thread {
   jlong     _pending_failed_speculation;
 
   // These fields are mutually exclusive in terms of live ranges.
-  union {
-    // Communicates the pc at which the most recent implicit exception occurred
-    // from the signal handler to a deoptimization stub.
-    address   _implicit_exception_pc;
-
-    // Communicates an alternative call target to an i2c stub from a JavaCall .
-    address   _alternate_call_target;
-  } _jvmci;
 
   // The JVMCIRuntime in a JVMCI shared library
   JVMCIRuntime* _libjvmci_runtime;
