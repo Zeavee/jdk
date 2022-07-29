@@ -884,10 +884,11 @@ private:
  private:
   void set_entry_point(ThreadFunction entry_point) { _entry_point = entry_point; }
 
+ public:
+
+
   // factor out low-level mechanics for use in both normal and error cases
   const char* get_thread_name_string(char* buf = NULL, int buflen = 0) const;
-
- public:
 
   // Frame iteration; calls the function f for all frames on the stack
   void frames_do(void f(frame*, const RegisterMap*));
