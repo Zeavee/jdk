@@ -23,6 +23,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include "precompiled.hpp"
 #include "classfile/vmSymbols.hpp"
 #include "code/nmethod.hpp"
