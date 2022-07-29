@@ -289,15 +289,6 @@ class JavaThread: public Thread {
                                                  // only VM_Exit can set _vm_exited
   };
 
-  union {
-    // Communicates the pc at which the most recent implicit exception occurred
-    // from the signal handler to a deoptimization stub.
-    address   _implicit_exception_pc;
-
-    // Communicates an alternative call target to an i2c stub from a JavaCall .
-    address   _alternate_call_target;
-  } _jvmci;
-
  private:
   // In general a JavaThread's _terminated field transitions as follows:
   //
@@ -361,6 +352,14 @@ class JavaThread: public Thread {
   jlong     _pending_failed_speculation;
 
   // These fields are mutually exclusive in terms of live ranges.
+  union {
+    // Communicates the pc at which the most recent implicit exception occurred
+    // from the signal handler to a deoptimization stub.
+    address   _implicit_exception_pc;
+
+    // Communicates an alternative call target to an i2c stub from a JavaCall .
+    address   _alternate_call_target;
+  } _jvmci;
 
   // The JVMCIRuntime in a JVMCI shared library
   JVMCIRuntime* _libjvmci_runtime;
@@ -706,7 +705,10 @@ private:
   void set_pending_deoptimization(int reason)     { _pending_deoptimization = reason; }
   void set_pending_failed_speculation(jlong failed_speculation) { _pending_failed_speculation = failed_speculation; }
   void set_pending_transfer_to_interpreter(bool b) { _pending_transfer_to_interpreter = b; }
-  void set_jvmci_alternate_call_target(address a) { assert(_jvmci._alternate_call_target == NULL, "must be"); _jvmci._alternate_call_target = a; }
+  void set_jvmci_alternate_call_target(address a) { 
+    fprintf(stderr, "This is old alt: %p and this is new alt: %p\n", _jvmci._alternate_call_target, a);
+    assert(_jvmci._alternate_call_target == NULL, "must be"); _jvmci._alternate_call_target = a; 
+  }
   void set_jvmci_implicit_exception_pc(address a) { assert(_jvmci._implicit_exception_pc == NULL, "must be"); _jvmci._implicit_exception_pc = a; }
 
   virtual bool in_retryable_allocation() const    { return _in_retryable_allocation; }
