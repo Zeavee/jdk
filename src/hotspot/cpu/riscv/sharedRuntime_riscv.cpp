@@ -517,7 +517,7 @@ void SharedRuntime::gen_i2c_adapter(MacroAssembler *masm,
     Label no_alternative_target;
     __ beq(as_Register(0), t0, no_alternative_target);
     __ addi(t1, t0, 0);
-    __ sd(zero, Address(tp, in_bytes(JavaThread::jvmci_alternate_call_target_offset())));
+    __ sd(as_Register(0), Address(tp, in_bytes(JavaThread::jvmci_alternate_call_target_offset())));
     __ bind(no_alternative_target);
   }
 #endif // INCLUDE_JVMCI
