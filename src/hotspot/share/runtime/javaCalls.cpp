@@ -322,7 +322,6 @@ Handle JavaCalls::construct_new_instance(InstanceKlass* klass, Symbol* construct
 // -------------------------------------------------
 // Implementation of JavaCalls (low level)
 
-int a = 0;
 
 void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArguments* args, TRAPS) {
   // Check if we need to wrap a potential OS exception handler around thread.
@@ -415,12 +414,8 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
           fprintf(stderr, "This is method: %s \n", mname);
           os::free(mname);
 
-          fprintf(stderr, "This is thread: %p \n", thread);
-
           thread->set_jvmci_alternate_call_target(verified_entry_point);
           entry_point = method->adapter()->get_i2c_entry();
-          assert(a < 1, "hey");
-          a += 1;
         }
       }
 #endif
