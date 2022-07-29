@@ -78,8 +78,7 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
     NativeJump* jump = nativeJump_at(pc);
     jump->set_jump_destination((address) foreign_call_destination);
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
-  } else if (inst->is_call() || NativeInstruction::is_lui_at((address)inst)) {
-    // jalr, lui + jalr;
+  } else if (inst->is_movptr()) {
     MacroAssembler::pd_patch_instruction_size((address)inst,
                                               (address)foreign_call_destination);
   } else {
