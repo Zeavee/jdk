@@ -1996,10 +1996,11 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ mvw(xcpool, (int32_t)Deoptimization::Unpack_reexecute);
     __ mv(c_rarg0, tp);
-    __ mvw(c_rarg2, rcpool); // exec mode
+    __ mvw(c_rarg2, xcpool); // exec mode
+    int32_t offset = 0;
     __ la_patchable(t0,
            RuntimeAddress(CAST_FROM_FN_PTR(address,
-                                           Deoptimization::uncommon_trap)), 0);
+                                           Deoptimization::uncommon_trap)), offset);
     __ jalr(x1, t0, 0);
     __ bind(retaddr);
     oop_maps->add_gc_map( __ pc()-start, map->deep_copy());
