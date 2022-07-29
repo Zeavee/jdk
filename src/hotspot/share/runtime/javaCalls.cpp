@@ -23,8 +23,6 @@
  *
  */
 
-#include <stdlib.h>
-
 #include "precompiled.hpp"
 #include "classfile/vmSymbols.hpp"
 #include "code/nmethod.hpp"
@@ -336,10 +334,10 @@ void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArgu
 void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaCallArguments* args, TRAPS) {
 
   JavaThread* thread = THREAD;
-  char* mname = (char*) malloc(100);
+  char* mname = (char*) os::malloc(100);
   method->name_and_sig_as_C_string(mname, 100);
   fprintf(stderr, "This is method: %s and this is thread", mname);
-  free(mname);
+  os::free(mname);
   assert(method.not_null(), "must have a method to call");
   assert(!SafepointSynchronize::is_at_safepoint(), "call to Java code during VM operation");
   assert(!thread->handle_area()->no_handle_mark_active(), "cannot call out to Java here");
