@@ -334,10 +334,6 @@ void JavaCalls::call(JavaValue* result, const methodHandle& method, JavaCallArgu
 void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaCallArguments* args, TRAPS) {
 
   JavaThread* thread = THREAD;
-  char* mname = (char*) os::malloc(100, mtInternal);
-  method->name_and_sig_as_C_string(mname, 100);
-  fprintf(stderr, "This is method: %s and this is thread", mname);
-  os::free(mname);
   assert(method.not_null(), "must have a method to call");
   assert(!SafepointSynchronize::is_at_safepoint(), "call to Java code during VM operation");
   assert(!thread->handle_area()->no_handle_mark_active(), "cannot call out to Java here");
@@ -413,6 +409,10 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
         // respect to nmethod sweeping.
         address verified_entry_point = (address) HotSpotJVMCI::InstalledCode::entryPoint(NULL, alternative_target());
         if (verified_entry_point != NULL) {
+          char* mname = (char*) os::malloc(100, mtInternal);
+          method->name_and_sig_as_C_string(mname, 100);
+          fprintf(stderr, "This is method: %s $n", mname);
+          os::free(mname);
           thread->set_jvmci_alternate_call_target(verified_entry_point);
           entry_point = method->adapter()->get_i2c_entry();
         }
