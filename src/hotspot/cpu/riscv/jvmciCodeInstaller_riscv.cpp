@@ -66,6 +66,13 @@ void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCod
   for (int i = 0; i < 8; ++i) {
     fprintf(stderr, "This is inst normal: %u and this is funct2 %u\n", NativeInstruction::extract_opcode(pc + NativeInstruction::instruction_size * i), NativeInstruction::extract_funct3(pc + NativeInstruction::instruction_size * i));
   }
+  fprintf(stderr, "is lui? %d\n", is_lui_at(pc)); // Lui
+  fprintf(stderr, "is addi? %d\n", is_addi_at(pc + NativeInstruction::instruction_size)); // Addi
+  fprintf(stderr, "is slli? %d\n", is_slli_shift_at(pc + NativeInstruction::instruction_size * 2, 11)); // Slli Rd, Rs, 11
+  fprintf(stderr, "is addi? %d\n", is_addi_at(pc + NativeInstruction::instruction_size * 3)); // Addi
+  fprintf(stderr, "is slli? %d\n", is_slli_shift_at(pc + NativeInstruction::instruction_size * 4, 6)); // Slli Rd, Rs, 6
+  fprintf(stderr, "is addi? %d\n", is_addi_at(pc + NativeInstruction::instruction_size * 5));
+
   NativeMovConstReg* move = nativeMovConstReg_at(pc);
   void* reference = record_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
   move->set_data((intptr_t) reference);
