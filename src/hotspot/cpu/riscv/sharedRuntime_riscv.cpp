@@ -1985,21 +1985,21 @@ void SharedRuntime::generate_deopt_blob() {
     uncommon_trap_offset = __ pc() - start;
 
     // Save everything in sight.
-    reg_save.save_live_registers(masm, 0, &frame_size_in_words);
+    reg_saver.save_live_registers(masm, 0, &frame_size_in_words);
     // fetch_unroll_info needs to call last_java_frame()
     Label retaddr;
     __ set_last_Java_frame(sp, noreg, retaddr, t0);
 
-    __ lwu(c_rarg1, Address(rthread, in_bytes(JavaThread::pending_deoptimization_offset())));
+    __ lwu(c_rarg1, Address(tp, in_bytes(JavaThread::pending_deoptimization_offset())));
     __ mvw(t0, -1);
-    __ sw(rscratch1, Address(rthread, in_bytes(JavaThread::pending_deoptimization_offset())));
+    __ sw(t0, Address(tp, in_bytes(JavaThread::pending_deoptimization_offset())));
 
-    __ mvw(rcpool, (int32_t)Deoptimization::Unpack_reexecute);
+    __ mvw(xcpool, (int32_t)Deoptimization::Unpack_reexecute);
     __ mv(c_rarg0, tp);
     __ mvw(c_rarg2, rcpool); // exec mode
     __ la_patchable(t0,
            RuntimeAddress(CAST_FROM_FN_PTR(address,
-                                           Deoptimization::uncommon_trap)));
+                                           Deoptimization::uncommon_trap)), 0);
     __ jalr(x1, t0, 0);
     __ bind(retaddr);
     oop_maps->add_gc_map( __ pc()-start, map->deep_copy());
