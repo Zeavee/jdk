@@ -513,6 +513,7 @@ void SharedRuntime::gen_i2c_adapter(MacroAssembler *masm,
 #if INCLUDE_JVMCI
   if (EnableJVMCI) {
     // check if this call should be routed towards a specific entry point
+    fprintf(stderr, "Do we go here?\n");
     __ ld(t0, Address(tp, in_bytes(JavaThread::jvmci_alternate_call_target_offset())));
     Label no_alternative_target;
     __ beq(as_Register(0), t0, no_alternative_target);
