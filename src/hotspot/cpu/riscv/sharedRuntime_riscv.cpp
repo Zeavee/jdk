@@ -1976,7 +1976,7 @@ void SharedRuntime::generate_deopt_blob() {
   __ mvw(xcpool, Deoptimization::Unpack_reexecute); // callee-saved
   __ j(cont);
 
-#if INCLUDE_JVMCI
+/*#if INCLUDE_JVMCI
   Label after_fetch_unroll_info_call;
   int implicit_exception_uncommon_trap_offset = 0;
   int uncommon_trap_offset = 0;
@@ -2014,7 +2014,7 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ j(after_fetch_unroll_info_call);
   } // EnableJVMCI
-#endif // INCLUDE_JVMCI
+#endif // INCLUDE_JVMCI*/
 
   int exception_offset = __ pc() - start;
 
@@ -2109,11 +2109,11 @@ void SharedRuntime::generate_deopt_blob() {
 
   __ reset_last_Java_frame(false);
 
-#if INCLUDE_JVMCI
+/*#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     __ bind(after_fetch_unroll_info_call);
   }
-#endif
+#endif*/
 
   // Load UnrollBlock* into x15
   __ mv(x15, x10);
@@ -2270,12 +2270,12 @@ void SharedRuntime::generate_deopt_blob() {
   _deopt_blob = DeoptimizationBlob::create(&buffer, oop_maps, 0, exception_offset, reexecute_offset, frame_size_in_words);
   assert(_deopt_blob != NULL, "create deoptimization blob fail!");
   _deopt_blob->set_unpack_with_exception_in_tls_offset(exception_in_tls_offset);
-#if INCLUDE_JVMCI
+/*#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     _deopt_blob->set_uncommon_trap_offset(uncommon_trap_offset);
     _deopt_blob->set_implicit_exception_uncommon_trap_offset(implicit_exception_uncommon_trap_offset);
   }
-#endif
+#endif*/
 }
 
 // Number of stack slots between incoming argument block and the start of
