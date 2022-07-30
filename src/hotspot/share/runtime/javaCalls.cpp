@@ -409,11 +409,6 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
         // respect to nmethod sweeping.
         address verified_entry_point = (address) HotSpotJVMCI::InstalledCode::entryPoint(NULL, alternative_target());
         if (verified_entry_point != NULL) {
-          char* mname = (char*) os::malloc(100, mtInternal);
-          method->name_and_sig_as_C_string(mname, 100);
-          fprintf(stderr, "This is method: %s \n", mname);
-          os::free(mname);
-
           thread->set_jvmci_alternate_call_target(verified_entry_point);
           entry_point = method->adapter()->get_i2c_entry();
         }
