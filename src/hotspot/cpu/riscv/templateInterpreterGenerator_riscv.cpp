@@ -507,9 +507,9 @@ address TemplateInterpreterGenerator::generate_deopt_entry_for(TosState state,
       __ stop("unexpected pending monitor in deopt entry");
       __ bind(L);
     }
-#endif*/
-  }
 #endif
+  }
+#endif*/
   // handle exceptions
   {
     Label L;
