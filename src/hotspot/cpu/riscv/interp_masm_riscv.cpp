@@ -1217,12 +1217,21 @@ void InterpreterMacroAssembler::record_klass_in_profile_helper(
     if (is_virtual_call) {
       increment_mdp_data_at(mdp, in_bytes(CounterData::count_offset()));
     }
-
+#if INCLUDE_JVMCI
+    else if (EnableJVMCI) {
+      increment_mdp_data_at(mdp, in_bytes(ReceiverTypeData::nonprofiled_receiver_count_offset()));
+    }
+#endif // INCLUDE_JVMCI
   } else {
     int non_profiled_offset = -1;
     if (is_virtual_call) {
       non_profiled_offset = in_bytes(CounterData::count_offset());
     }
+#if INCLUDE_JVMCI
+    else if (EnableJVMCI) {
+      non_profiled_offset = in_bytes(ReceiverTypeData::nonprofiled_receiver_count_offset());
+    }
+#endif // INCLUDE_JVMCI
 
     record_item_in_profile_helper(receiver, mdp, reg2, 0, done, TypeProfileWidth,
       &VirtualCallData::receiver_offset, &VirtualCallData::receiver_count_offset, non_profiled_offset);
