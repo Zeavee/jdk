@@ -1960,6 +1960,12 @@ void SharedRuntime::generate_deopt_blob() {
   __ j(cont);
 
   int reexecute_offset = __ pc() - start;
+#if INCLUDE_JVMCI && !defined(COMPILER1)
+  if (EnableJVMCI && UseJVMCICompiler) {
+    // JVMCI does not use this kind of deoptimization
+    __ should_not_reach_here();
+  }
+#endif
 
   // Reexecute case
   // return address is the pc describes what bci to do re-execute at
@@ -1978,8 +1984,8 @@ void SharedRuntime::generate_deopt_blob() {
   if (EnableJVMCI) {
     implicit_exception_uncommon_trap_offset = __ pc() - start;
 
-    __ ld(x1, Address(tp, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
-    __ sd(zr, Address(tp, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
+    __ ld(x1, Address(xthread, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
+    __ sd(zr, Address(xthread, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
 
     uncommon_trap_offset = __ pc() - start;
 
@@ -1989,12 +1995,12 @@ void SharedRuntime::generate_deopt_blob() {
     Label retaddr;
     __ set_last_Java_frame(sp, noreg, retaddr, t0);
 
-    __ lwu(c_rarg1, Address(tp, in_bytes(JavaThread::pending_deoptimization_offset())));
+    __ lwu(c_rarg1, Address(xthread, in_bytes(JavaThread::pending_deoptimization_offset())));
     __ mvw(t0, -1);
-    __ sw(t0, Address(tp, in_bytes(JavaThread::pending_deoptimization_offset())));
+    __ sw(t0, Address(xthread, in_bytes(JavaThread::pending_deoptimization_offset())));
 
     __ mvw(xcpool, (int32_t)Deoptimization::Unpack_reexecute);
-    __ mv(c_rarg0, tp);
+    __ mv(c_rarg0, xthread);
     __ mv(c_rarg2, xcpool); // exec mode
     int32_t offset = 0;
     __ la_patchable(t0,

@@ -491,10 +491,10 @@ address TemplateInterpreterGenerator::generate_deopt_entry_for(TosState state,
   // only occur on method entry so emit it only for vtos with step 0.
   if (EnableJVMCI && state == vtos && step == 0) {
     Label L;
-    __ lbu(t0, Address(tp, JavaThread::pending_monitorenter_offset()));
+    __ lbu(t0, Address(xthread, JavaThread::pending_monitorenter_offset()));
     __ beqz(t0, L);
     // Clear flag.
-    __ sb(zr, Address(tp, JavaThread::pending_monitorenter_offset()));
+    __ sb(zr, Address(xthread, JavaThread::pending_monitorenter_offset()));
     // Take lock.
     lock_method();
     __ bind(L);
@@ -502,7 +502,7 @@ address TemplateInterpreterGenerator::generate_deopt_entry_for(TosState state,
 #ifdef ASSERT
     if (EnableJVMCI) {
       Label L;
-      __ lbu(t0, Address(tp, JavaThread::pending_monitorenter_offset()));
+      __ lbu(t0, Address(xthread, JavaThread::pending_monitorenter_offset()));
       __ beqz(t0, L);
       __ stop("unexpected pending monitor in deopt entry");
       __ bind(L);
