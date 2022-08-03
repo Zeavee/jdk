@@ -710,9 +710,10 @@ CodeBlob* CodeCache::find_blob(void* start) {
 CodeBlob* CodeCache::find_blob_unsafe(void* start) {
   // NMT can walk the stack before code cache is created
   if (_heaps != NULL) {
-    fprintf(stderr, "heyhey\n");
+    fprintf(stderr, "heyhey1 %p\n", _heaps);
     CodeHeap* heap = get_code_heap_containing(start);
     if (heap != NULL) {
+      fprintf(stderr, "heyhey2 %p\n", heap);
       return heap->find_blob_unsafe(start);
     }
   }
