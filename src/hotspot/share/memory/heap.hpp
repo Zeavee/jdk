@@ -170,12 +170,7 @@ class CodeHeap : public CHeapObj<mtCode> {
   char* high_boundary() const                    { return _memory.high_boundary(); }
 
   // Containment means "contained in committed space".
-  bool contains(const void* p) const             {
-    if (low() > p || high() < p) {
-      fprintf(stderr, "This is low %p, this is p %p, this is high %p\n", low(), p, high());
-    }
-    return low() <= p && p < high();
-  }
+  bool contains(const void* p) const             { return low() <= p && p < high(); }
   bool contains_blob(const CodeBlob* blob) const {
     return contains((void*)blob);
   }
