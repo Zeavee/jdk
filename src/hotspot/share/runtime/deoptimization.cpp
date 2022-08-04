@@ -2091,6 +2091,9 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
     // Load class if necessary
     if (unloaded_class_index >= 0) {
       constantPoolHandle constants(current, trap_method->constants());
+      if (unloaded_class_index < 0) {
+        fprintf(stderr, "Why? %ld %d\n", unloaded_class_index, unloaded_class_index);
+      }
       load_class_by_index(constants, unloaded_class_index, THREAD);
     }
 
