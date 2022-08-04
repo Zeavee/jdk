@@ -1767,6 +1767,7 @@ void Deoptimization::load_class_by_index(const constantPoolHandle& constant_pool
   // bytecode, without paying special attention to the class index.
   // So this whole "class index" feature should probably be removed.
 
+  assert(index >= 0, "index too small %d", index);
   if (constant_pool->tag_at(index).is_unresolved_klass()) {
     Klass* tk = constant_pool->klass_at(index, THREAD);
     if (HAS_PENDING_EXCEPTION) {
