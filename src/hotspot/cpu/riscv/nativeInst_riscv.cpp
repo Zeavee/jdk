@@ -372,7 +372,7 @@ void NativeJump::patch_verified_entry(address entry, address verified_entry, add
   } else {
     // We use an illegal instruction for marking a method as
     // not_entrant or zombie.
-    fprintf(stderr, "We go here? %p\n", dest - verified_entry);
+    fprintf(stderr, "We go here? %ld\n", dest - verified_entry);
     NativeIllegalInstruction::insert(verified_entry);
   }
 
