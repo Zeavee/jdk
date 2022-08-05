@@ -375,8 +375,15 @@ void NativeJump::patch_verified_entry(address entry, address verified_entry, add
     ptrdiff_t offset = dest - verified_entry;
     uint32_t insn = 0;
     address pInsn = (address)&insn;
-    Assembler::patch(pInsn, 31, 0, (((offset >> 12) & 0xfffff) << 12) | (28 << 7) | 0b0110111); // lui x28 offset
-    Assembler::patch(pInsn + 4, 31, 0, ((offset & 0xfff) << 20) | (28 << 15) | (0b000 << 12) | 0b1100111); // jalr x0 x28 offset
+    Assembler::patch(pInsn, 31, 12, ((offset >> 12) & 0xfffff));
+    Assembler::patch(pInsn, 11, 7, 28);
+    Assembler::patch(pInsn, 6, 0, 0b0110111);
+
+    Assembler::patch(pInsn + 4, 31, 20, (offset >> 12) & 0xfff);
+    Assembler::patch(pInsn + 4, 19, 15, 28);
+    Assembler::patch(pInsn + 4, 14, 12, 0);
+    Assembler::patch(pInsn + 4, 11, 7, 0);
+    Assembler::patch(pInsn + 4, 6, 0, 0b1100111);
     //NativeIllegalInstruction::insert(verified_entry);
   }
 
