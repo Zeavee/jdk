@@ -619,9 +619,6 @@ Deoptimization::UnrollBlock* Deoptimization::fetch_unroll_info_helper(JavaThread
     ContinuationEntry::from_frame(deopt_sender)->set_argsize(0);
   }
 
-  if (CodeCache::find_blob_unsafe(frame_pcs[0]) == NULL) {
-    fprintf(stderr, "%d, %p\n", Continuation::is_cont_barrier_frame(deoptee), frame_pcs[0]);
-  }
   assert(CodeCache::find_blob_unsafe(frame_pcs[0]) != NULL, "bad pc");
 
 #if INCLUDE_JVMCI

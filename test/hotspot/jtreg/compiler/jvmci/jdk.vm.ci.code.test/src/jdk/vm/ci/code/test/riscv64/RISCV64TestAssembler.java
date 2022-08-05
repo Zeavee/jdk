@@ -189,9 +189,10 @@ public class RISCV64TestAssembler extends TestAssembler {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
         emitNop();
-        emitGrowStack(32);
-        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 32);
+        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);
+        emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);
         emitMv(RISCV64.x8, RISCV64.x2);
+
         setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
     }
 
