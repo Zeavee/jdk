@@ -372,7 +372,9 @@ void NativeJump::patch_verified_entry(address entry, address verified_entry, add
   } else {
     // We use an illegal instruction for marking a method as
     // not_entrant or zombie.
-    fprintf(stderr, "We go here? %ld\n", dest - verified_entry);
+    ptrdiff_t offset = dest - verified_entry;
+    Assembler::patch(pInsn, 31, 0, (((offset >> 12) << 12) & 0xfffff) | (28 << 7) | 0b0110111); // lui x28 offset
+    Assembler::patch(pInsn + 4, 31, 0, ((offset << 20) & 0xfff) | (28 << 15) | (0b000 << 12) | 0b1100111); // jalr x0 x28 offset
     NativeIllegalInstruction::insert(verified_entry);
   }
 
