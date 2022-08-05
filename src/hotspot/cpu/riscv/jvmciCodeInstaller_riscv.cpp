@@ -42,6 +42,7 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
   } else if (inst->is_jump()) {
     return pc_offset + NativeJump::instruction_size;
   } else if (inst->is_movptr()) {
+    fprintf(stderr, "This is value returned: %d\n", (((NativeMovConstReg*) inst)->next_instruction_address() - pc));
     return pc_offset + (((NativeMovConstReg*) inst)->next_instruction_address() - pc);
   } else {
     JVMCI_ERROR_0("unsupported type of instruction for call site");
@@ -113,5 +114,5 @@ VMReg CodeInstaller::get_hotspot_reg(jint jvmci_reg, JVMCI_TRAPS) {
 }
 
 bool CodeInstaller::is_general_purpose_reg(VMReg hotspotRegister) {
-  return !hotspotRegister->is_FloatRegister();
+  return !(hotspotRegister->is_FloatRegister() || hotspotRegister->is_VectorRegister());
 }
