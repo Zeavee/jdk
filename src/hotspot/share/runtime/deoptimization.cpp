@@ -1764,6 +1764,7 @@ void Deoptimization::load_class_by_index(const constantPoolHandle& constant_pool
   // bytecode, without paying special attention to the class index.
   // So this whole "class index" feature should probably be removed.
 
+  fprintf(stderr, "this is index2: %d\n", unloaded_class_index);
   assert(index >= 0, "index too small %d", index);
   if (constant_pool->tag_at(index).is_unresolved_klass()) {
     Klass* tk = constant_pool->klass_at(index, THREAD);
@@ -2088,6 +2089,7 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
     // Load class if necessary
     if (unloaded_class_index >= 0) {
       constantPoolHandle constants(current, trap_method->constants());
+      fprintf(stderr, "this is index1: %d\n", unloaded_class_index);
       load_class_by_index(constants, unloaded_class_index, THREAD);
     }
 
