@@ -405,8 +405,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitIntRet(Register a) {
         emitMv(RISCV64.x10, a);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 32);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 40);  // ld x1 40(sp)
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);  // ld x8 32(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);  // ld x1 40(sp)
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
@@ -414,8 +414,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitFloatRet(Register a) {
         assert a == RISCV64.f10 : "Unimplemented move " + a;
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 32);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 40);  // ld x1 40(sp)
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);  // ld x8 32(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);  // ld x1 40(sp)
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
