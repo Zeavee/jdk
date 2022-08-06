@@ -170,11 +170,11 @@ public class RISCV64TestAssembler extends TestAssembler {
     @Override
     public void emitGrowStack(int size) {
         assert size % 16 == 0;
-        if (size > -4096 && size < 0) {
+        if (size > -2048 && size < 0) {
             emitAdd(RISCV64.x2, RISCV64.x2, -size);
         } else if (size == 0) {
             // No-op
-        } else if (size < 4096) {
+        } else if (size < 2048) {
             emitSub(RISCV64.x2, RISCV64.x2, size);
         } else if (size < 65535) {
             emitLoadImmediate(scratchRegister, size);
@@ -222,7 +222,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     @Override
     public void emitCall(long addr) {
         emitLoadPointer48(scratchRegister, addr);
-        emitJalr(scratchRegister, RISCV64.x1, 0);
+        emitJalr(RISCV64.x1, scratchRegister, 0);
     }
 
     @Override
