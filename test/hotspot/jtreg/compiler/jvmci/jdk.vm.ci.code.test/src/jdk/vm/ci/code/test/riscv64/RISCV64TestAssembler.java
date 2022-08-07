@@ -221,8 +221,8 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
-        emitLoadLong(scratchRegister, addr);
-        emitJalr(RISCV64.x1, scratchRegister, 0);
+        emitMovPtrHelper(scratchRegister, addr);
+        emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
     }
 
     @Override
@@ -256,13 +256,17 @@ public class RISCV64TestAssembler extends TestAssembler {
         }
     }
 
-    private void emitLoadPointer48(Register ret, long addr) {
+    private emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
         emitLoadPointer32(ret, (int) ((addr >> 17) & 0x7fffffff));
         emitShiftLeft(ret, ret, 11);
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
+    }
+
+    private void emitLoadPointer48(Register ret, long addr) {
+        emitMovPtrHelper(ret, addr);
         emitAdd(ret, ret, (int) (addr & 0x3f));
     }
 
@@ -297,8 +301,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         emitAuipc(ret, 0xdead >> 12);
-        emitAdd(ret, ret, 0xdead & 0xfff);
-        emitLoadRegister(ret, RISCV64Kind.DWORD, ret, 0);
+        emitLoadRegister(ret, RISCV64Kind.DWORD, ret, 0xdead & 0xfff);
         return ret;
     }
 
@@ -308,8 +311,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         emitAuipc(ret, 0xdead >> 12);
-        emitAdd(ret, ret, 0xdead & 0xfff);
-        emitLoadRegister(ret, RISCV64Kind.QWORD, ret, 0);
+        emitLoadRegister(ret, RISCV64Kind.QWORD, ret, 0xdead & 0xfff);
         return ret;
     }
 
@@ -320,8 +322,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         recordDataPatchInCode(ref);
         emitAuipc(scratchRegister, 0xdead >> 12);
-        emitAdd(scratchRegister, scratchRegister, 0xdead & 0xfff);
-        emitLoadRegister(scratchRegister, RISCV64Kind.QWORD, scratchRegister, 0);
+        emitLoadRegister(scratchRegister, RISCV64Kind.QWORD, scratchRegister, 0xdead & 0xfff);
         emitFmv(reg, RISCV64Kind.DOUBLE, scratchRegister);
         return reg;
     }
@@ -333,8 +334,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         recordDataPatchInCode(ref);
         emitAuipc(scratchRegister, 0xdead >> 12);
-        emitAdd(scratchRegister, scratchRegister, 0xdead & 0xfff);
-        emitLoadRegister(scratchRegister, RISCV64Kind.DWORD, scratchRegister, 0);
+        emitLoadRegister(scratchRegister, RISCV64Kind.DWORD, scratchRegister, 0xdead & 0xfff);
         emitFmv(reg, RISCV64Kind.SINGLE, scratchRegister);
         return reg;
     }
