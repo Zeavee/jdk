@@ -138,6 +138,7 @@ public class NativeCallTest extends CodeInstallationTest {
                 CallingConvention cc = codeCache.getRegisterConfig().getCallingConvention(NativeCall, returnType, argTypes, asm.valueKindFactory);
                 asm.emitCallPrologue(cc, values);
                 asm.emitCall(addr);
+                System.out.println("This is addr: " + addr);
                 asm.emitCallEpilogue(cc);
                 asm.emitFloatRet(((RegisterValue) cc.getReturn()).getRegister());
             }, getMethod(name, types), values);
