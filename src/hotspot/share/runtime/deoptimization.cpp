@@ -1911,6 +1911,7 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
 #if INCLUDE_JVMCI
     int debug_id = trap_request_debug_id(trap_request);
 #endif
+    fprintf(stderr, "This is trap_request %d\n", trap_request);
     jint unloaded_class_index = trap_request_index(trap_request); // CP idx or -1
     fprintf(stderr, "This is unloaded_class_index %d\n", unloaded_class_index);
 
