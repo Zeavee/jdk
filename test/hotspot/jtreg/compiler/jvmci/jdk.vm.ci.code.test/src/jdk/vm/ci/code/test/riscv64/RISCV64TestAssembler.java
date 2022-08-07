@@ -256,7 +256,7 @@ public class RISCV64TestAssembler extends TestAssembler {
         }
     }
 
-    private emitMovPtrHelper(Register ret, long addr) {
+    private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
         emitLoadPointer32(ret, (int) ((addr >> 17) & 0x7fffffff));
