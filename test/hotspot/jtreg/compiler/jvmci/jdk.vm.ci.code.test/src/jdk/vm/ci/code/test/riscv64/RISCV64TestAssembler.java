@@ -221,7 +221,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
-        emitLoadPointer48(scratchRegister, addr);
+        emitLoadLong(scratchRegister, addr);
         emitJalr(RISCV64.x1, scratchRegister, 0);
     }
 
