@@ -215,6 +215,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCallEpilogue(CallingConvention cc) {
+        emitCall(0);
         emitGrowStack(-cc.getStackSize());
         frameSize -= cc.getStackSize();
     }
