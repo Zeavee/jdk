@@ -26,6 +26,9 @@ package jdk.vm.ci.code.test.riscv64;
 
 import jdk.vm.ci.riscv64.RISCV64;
 import jdk.vm.ci.riscv64.RISCV64Kind;
+
+import java.io.FilePermission;
+
 import jdk.vm.ci.code.CallingConvention;
 import jdk.vm.ci.code.CodeCacheProvider;
 import jdk.vm.ci.code.DebugInfo;
@@ -221,7 +224,9 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
+        fprintf(stderr, "this is addr %ld\n", addr);
         emitMovPtrHelper(scratchRegister, addr);
+        fprintf(stderr, "this is addr 6 lowest bits %d\n", (int) (addr & 0x3f));
         emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
     }
 
@@ -259,8 +264,10 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
+        fprintf(stderr, "This is 32 highest bits %d\n", (int) ((addr >> 17) & 0xffffffff));
         emitLoadPointer32(ret, (int) ((addr >> 17) & 0xffffffff));
         emitShiftLeft(ret, ret, 11);
+        fprintf(stderr, "This is 11 lowest bits %d\n", ((addr >> 6) & 0x7ff));
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
     }
