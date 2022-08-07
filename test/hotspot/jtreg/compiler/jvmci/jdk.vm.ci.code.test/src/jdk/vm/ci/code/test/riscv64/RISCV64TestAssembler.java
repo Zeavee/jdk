@@ -224,9 +224,9 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
-        fprintf(stderr, "this is addr %ld\n", addr);
+        System.out.println("this is addr " + addr);
         emitMovPtrHelper(scratchRegister, addr);
-        fprintf(stderr, "this is addr 6 lowest bits %d\n", (int) (addr & 0x3f));
+        System.out.println("this is addr 6 lowest bits " + (int) (addr & 0x3f));
         emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
     }
 
@@ -264,10 +264,10 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
-        fprintf(stderr, "This is 32 highest bits %d\n", (int) ((addr >> 17) & 0xffffffff));
+        System.out.println("This is 32 highest bits " + (int) ((addr >> 17) & 0xffffffff));
         emitLoadPointer32(ret, (int) ((addr >> 17) & 0xffffffff));
         emitShiftLeft(ret, ret, 11);
-        fprintf(stderr, "This is 11 lowest bits %d\n", ((addr >> 6) & 0x7ff));
+        System.out.println("This is 11 lowest bits " + (int) ((addr >> 6) & 0x7ff));
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
     }
