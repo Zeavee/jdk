@@ -215,7 +215,6 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCallEpilogue(CallingConvention cc) {
-        emitCall(0);
         emitGrowStack(-cc.getStackSize());
         frameSize -= cc.getStackSize();
     }
@@ -260,7 +259,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
-        emitLoadPointer32(ret, (int) ((addr >> 17) & 0x7fffffff));
+        emitLoadPointer32(ret, (int) ((addr >> 17) & 0xffffffff));
         emitShiftLeft(ret, ret, 11);
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
