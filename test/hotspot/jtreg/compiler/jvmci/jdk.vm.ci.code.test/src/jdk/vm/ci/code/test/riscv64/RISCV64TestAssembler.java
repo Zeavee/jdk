@@ -428,7 +428,7 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
         emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff);  // ld x8 32(sp)
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff);  // ld x1 40(sp)
-        emitJalr(RISCV64.x0, RISCV64.x0, 0);  // ret
+        emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
     @Override
