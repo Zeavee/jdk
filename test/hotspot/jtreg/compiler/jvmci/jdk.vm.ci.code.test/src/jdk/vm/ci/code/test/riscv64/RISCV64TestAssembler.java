@@ -109,12 +109,12 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitLui(Register Rd, int imm20) {
         // LUI
-        code.emitInt(((imm20 << 12) & 0xfffff) | (Rd.encoding << 7) | 0b0110111);
+        code.emitInt((imm20 << 12) | (Rd.encoding << 7) | 0b0110111);
     }
 
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
-        code.emitInt(((imm20 << 12) & 0xfffff) | (Rd.encoding << 7) | 0b0010111);
+        code.emitInt((imm20 << 12) | (Rd.encoding << 7) | 0b0010111);
     }
 
     private void emitLoadImmediate(Register Rd, int imm32) {
@@ -136,7 +136,7 @@ public class RISCV64TestAssembler extends TestAssembler {
             case DOUBLE: size = 0b011; opc = 0b0000111; break;
             default: throw new IllegalArgumentException();
         }
-        code.emitInt(((offset << 20) & 0xfffff) | (Rn.encoding << 15) | (size << 12) | (Rd.encoding << 7) | opc);
+        code.emitInt((offset << 20) | (Rn.encoding << 15) | (size << 12) | (Rd.encoding << 7) | opc);
     }
 
     private void emitStoreRegister(Register Rd, RISCV64Kind kind, Register Rn, int offset) {
@@ -153,7 +153,7 @@ public class RISCV64TestAssembler extends TestAssembler {
             case DOUBLE: size = 0b011; opc = 0b0100111; break;
             default: throw new IllegalArgumentException();
         }
-        code.emitInt((((offset >> 5) << 25) & 0x7f) | (Rd.encoding << 20) | (Rn.encoding << 15) | (size << 12) | ((offset & 0x1f) << 7) | opc);
+        code.emitInt(((offset >> 5) << 25) | (Rd.encoding << 20) | (Rn.encoding << 15) | (size << 12) | ((offset & 0x1f) << 7) | opc);
     }
 
     private void emitJalr(Register Rd, Register Rn, int imm) {
@@ -191,19 +191,18 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitPrologue() {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
-        emitNop();
-        /*emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32); // sd x8 sp(-32)
-        emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24); // sd x1 sp(-24)
+        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff); // sd x8 sp(-32)
+        emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff); // sd x1 sp(-24)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
 
-        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));*/
+        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
     }
 
     @Override
     public void emitEpilogue() {
-        /*recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
+        recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
         recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 4*4, true, null);
-        emitCall(0xdeaddeaddeadL);*/
+        emitCall(0xdeaddeaddeadL);
     }
 
     @Override
@@ -294,7 +293,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     @Override
     public Register emitLoadPointer(Register b, int offset) {
         Register ret = newRegister();
-        emitLoadRegister(ret, RISCV64Kind.QWORD, b, offset);
+        emitLoadRegister(ret, RISCV64Kind.QWORD, b, offset & 0xfff);
         return ret;
     }
 
@@ -392,7 +391,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public Register emitIntAdd(Register a, Register b) {
-        //emitAdd(a, a, b);
+        emitAdd(a, a, b);
         return a;
     }
 
@@ -406,19 +405,19 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitIntRet(Register a) {
-        /*emitMv(RISCV64.x10, a);
+        emitMv(RISCV64.x10, a);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);  // ld x1 40(sp)
-        emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret*/
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff);  // ld x8 32(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff);  // ld x1 40(sp)
+        emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
     @Override
     public void emitFloatRet(Register a) {
         assert a == RISCV64.f10 : "Unimplemented move " + a;
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);  // ld x1 40(sp)
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff);  // ld x8 32(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff);  // ld x1 40(sp)
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
@@ -452,7 +451,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private StackSlot emitDoubleToStack(StackSlot slot, Register a) {
-        emitStoreRegister(a, RISCV64Kind.DOUBLE, RISCV64.x2, slot.getOffset(frameSize));
+        emitStoreRegister(a, RISCV64Kind.DOUBLE, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
         return slot;
     }
 
@@ -463,7 +462,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private StackSlot emitFloatToStack(StackSlot slot, Register a) {
-        emitStoreRegister(a, RISCV64Kind.SINGLE, RISCV64.x2, slot.getOffset(frameSize));
+        emitStoreRegister(a, RISCV64Kind.SINGLE, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
         return slot;
     }
 
@@ -474,7 +473,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private StackSlot emitIntToStack(StackSlot slot, Register a) {
-        emitStoreRegister(a, RISCV64Kind.DWORD, RISCV64.x2, slot.getOffset(frameSize));
+        emitStoreRegister(a, RISCV64Kind.DWORD, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
         return slot;
     }
 
@@ -485,7 +484,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private StackSlot emitLongToStack(StackSlot slot, Register a) {
-        emitStoreRegister(a, RISCV64Kind.QWORD, RISCV64.x2, slot.getOffset(frameSize));
+        emitStoreRegister(a, RISCV64Kind.QWORD, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
         return slot;
     }
 
