@@ -114,7 +114,7 @@ public class CodeInstallationTest {
 
             Object expected = method.invoke(null, args);
             Object actual = installed.executeVarargs(args);
-            Assert.assertEquals(expected, installed);
+            Assert.assertEquals(expected, actual);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.toString());
