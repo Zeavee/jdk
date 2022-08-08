@@ -51,9 +51,9 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
 void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compressed, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
   jobject value = JNIHandles::make_local(obj());
-  fprintf(stderr, "This is opcode 1: %d and this is funct3: %d\n", extract_opcode(pc), extract_funct3(pc));
-  fprintf(stderr, "This is opcode 2: %d and this is funct3: %d\n", extract_opcode(pc + 4), extract_funct3(pc + 4));
-  fprintf(stderr, "This is opcode 3: %d and this is funct3: %d\n", extract_opcode(pc + 8), extract_funct3(pc + 8));
+  fprintf(stderr, "This is opcode 1: %d and this is funct3: %d\n", NativeInstruction::extract_opcode(pc), NativeInstruction::extract_funct3(pc));
+  fprintf(stderr, "This is opcode 2: %d and this is funct3: %d\n", NativeInstruction::extract_opcode(pc + 4), NativeInstruction::extract_funct3(pc + 4));
+  fprintf(stderr, "This is opcode 3: %d and this is funct3: %d\n", NativeInstruction::extract_opcode(pc + 8), NativeInstruction::extract_funct3(pc + 8));
   MacroAssembler::patch_oop(pc, cast_from_oop<address>(obj()));
   int oop_index = _oop_recorder->find_index(value);
   RelocationHolder rspec = oop_Relocation::spec(oop_index);
