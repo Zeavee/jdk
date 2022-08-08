@@ -516,7 +516,7 @@ void SharedRuntime::gen_i2c_adapter(MacroAssembler *masm,
   // Pre-load the register-jump target early, to schedule it better.
   __ ld(t1, Address(xmethod, in_bytes(Method::from_compiled_offset())));
 
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     // check if this call should be routed towards a specific entry point
     __ ld(t0, Address(xthread, in_bytes(JavaThread::jvmci_alternate_call_target_offset())));
@@ -526,7 +526,7 @@ void SharedRuntime::gen_i2c_adapter(MacroAssembler *masm,
     __ sd(zr, Address(xthread, in_bytes(JavaThread::jvmci_alternate_call_target_offset())));
     __ bind(no_alternative_target);
   }
-#endif // INCLUDE_JVMCI*/
+#endif // INCLUDE_JVMCI
 
   // Now generate the shuffle code.
   for (int i = 0; i < total_args_passed; i++) {
