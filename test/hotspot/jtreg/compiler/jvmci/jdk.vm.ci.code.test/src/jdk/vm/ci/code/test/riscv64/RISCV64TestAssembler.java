@@ -192,18 +192,18 @@ public class RISCV64TestAssembler extends TestAssembler {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
         emitNop();
-        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32); // sd x8 sp(-32)
+        /*emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32); // sd x8 sp(-32)
         emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24); // sd x1 sp(-24)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
 
-        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
+        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));*/
     }
 
     @Override
     public void emitEpilogue() {
-        recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
+        /*recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
         recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 4*4, true, null);
-        emitCall(0xdeaddeaddeadL);
+        emitCall(0xdeaddeaddeadL);*/
     }
 
     @Override
@@ -224,9 +224,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
-        System.out.println("this is addr " + addr);
         emitMovPtrHelper(scratchRegister, addr);
-        System.out.println("this is addr 6 lowest bits " + (int) (addr & 0x3f));
         emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
     }
 
@@ -264,10 +262,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
-        System.out.println("This is 32 highest bits " + (int) ((addr >> 17) & 0xffffffff));
         emitLoadPointer32(ret, (int) ((addr >> 17) & 0xffffffff));
         emitShiftLeft(ret, ret, 11);
-        System.out.println("This is 11 lowest bits " + (int) ((addr >> 6) & 0x7ff));
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
     }
@@ -396,7 +392,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public Register emitIntAdd(Register a, Register b) {
-        emitAdd(a, a, b);
+        //emitAdd(a, a, b);
         return a;
     }
 
@@ -410,11 +406,11 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitIntRet(Register a) {
-        emitMv(RISCV64.x10, a);
+        /*emitMv(RISCV64.x10, a);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
         emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32);  // ld x8 32(sp)
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24);  // ld x1 40(sp)
-        emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
+        emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret*/
     }
 
     @Override
