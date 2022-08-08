@@ -61,7 +61,7 @@ void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCod
   address pc = _instructions->start() + pc_offset;
   if (tag == PATCH_NARROW_KLASS) {
     narrowKlass narrowOop = record_narrow_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
-    MacroAssembler::pd_patch_instruction_size(pc, (address) narrowOop);
+    MacroAssembler::pd_patch_instruction_size(pc, (address) (long) narrowOop);
     JVMCI_event_3("relocating (narrow metaspace constant) at " PTR_FORMAT "/0x%x", p2i(pc), narrowOop);
   } else {
     NativeMovConstReg* move = nativeMovConstReg_at(pc);
