@@ -57,12 +57,25 @@ public class RISCV64TestAssembler extends TestAssembler {
               RISCV64.x14, RISCV64.x15, RISCV64.x16, RISCV64.x17);
     }
 
+    private static int f(int val, int msb, int lsb) {
+        int nbits = msb - lsb + 1;
+        assert val >= 0;
+        assert val < (1 << nbits);
+        assert msb >= lsb;
+        return val << lsb;
+    }
+
+    private static int f(Register r, int msb, int lsb) {
+        assert msb - lsb == 4;
+        return f(r.encoding, msb, lsb);
+    }
+
     private static int instructionImmediate(int imm, int rs1, int funct, int rd, int opcode) {
-        return (imm << 20) | (rs1 << 15) | (funct << 12) | (rd << 7) | opcode;
+        return f(imm, 31, 20) | f(rs1, 19, 15) | f(funct, 14, 12) | f(rd, 11, 7) | f(opcode, 6, 0);
     }
 
     private static int instructionRegister(int funct7, int rs2, int rs1, int funct3, int rd, int opcode) {
-        return (funct7 << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | opcode;
+        return f(funct7, 31, 25) | f(rs2, 24, 20) | f(rs1, 19, 15) | f(funct3, 14, 12) | f(rd, 11, 7) | f(opcode, 6, 0);
     }
 
     private void emitNop() {
@@ -106,12 +119,12 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitLui(Register Rd, int imm20) {
         // LUI
-        code.emitInt((imm20 << 12) | (Rd.encoding << 7) | 0b0110111);
+        code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0110111, 6, 0));
     }
 
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
-        code.emitInt((imm20 << 12) | (Rd.encoding << 7) | 0b0010111);
+        code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0010111, 6, 0));
     }
 
     private void emitLoadImmediate(Register Rd, int imm32) {
@@ -133,7 +146,7 @@ public class RISCV64TestAssembler extends TestAssembler {
             case DOUBLE: size = 0b011; opc = 0b0000111; break;
             default: throw new IllegalArgumentException();
         }
-        code.emitInt((offset << 20) | (Rn.encoding << 15) | (size << 12) | (Rd.encoding << 7) | opc);
+        code.emitInt(f(offset, 31, 20) | f(Rn, 19, 15) | f(size, 14, 12) | f(Rd, 11, 7) | f(opc, 6, 0));
     }
 
     private void emitStoreRegister(Register Rd, RISCV64Kind kind, Register Rn, int offset) {
@@ -150,7 +163,7 @@ public class RISCV64TestAssembler extends TestAssembler {
             case DOUBLE: size = 0b011; opc = 0b0100111; break;
             default: throw new IllegalArgumentException();
         }
-        code.emitInt(((offset >> 5) << 25) | (Rd.encoding << 20) | (Rn.encoding << 15) | (size << 12) | ((offset & 0x1f) << 7) | opc);
+        code.emitInt(f((offset >> 5), 31, 25) | f(Rd, 24, 20) | f(Rn, 19, 15) | f(size, 14, 12) | f((offset & 0x1f), 11, 7) | f(opc, 6, 0));
     }
 
     private void emitJalr(Register Rd, Register Rn, int imm) {
