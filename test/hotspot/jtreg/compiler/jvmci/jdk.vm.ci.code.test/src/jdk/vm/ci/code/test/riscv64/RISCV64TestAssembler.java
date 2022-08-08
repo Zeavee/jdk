@@ -283,7 +283,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         if (c.isCompressed()) {
-            emitLoadPointer32(ret, 0xdeaddead);
+            emitLoadImmediate(ret, 0xdeaddead);
         } else {
             emitLoadPointer48(ret, 0xdeaddeaddeadL);
         }
