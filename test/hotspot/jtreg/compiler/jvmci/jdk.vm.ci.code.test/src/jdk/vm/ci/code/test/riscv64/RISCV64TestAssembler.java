@@ -24,9 +24,6 @@
 
 package jdk.vm.ci.code.test.riscv64;
 
-import jdk.vm.ci.riscv64.RISCV64;
-import jdk.vm.ci.riscv64.RISCV64Kind;
-
 import jdk.vm.ci.code.CallingConvention;
 import jdk.vm.ci.code.CodeCacheProvider;
 import jdk.vm.ci.code.DebugInfo;
@@ -43,6 +40,8 @@ import jdk.vm.ci.hotspot.HotSpotForeignCallTarget;
 import jdk.vm.ci.meta.AllocatableValue;
 import jdk.vm.ci.meta.JavaKind;
 import jdk.vm.ci.meta.VMConstant;
+import jdk.vm.ci.riscv64.RISCV64;
+import jdk.vm.ci.riscv64.RISCV64Kind;
 
 public class RISCV64TestAssembler extends TestAssembler {
 
