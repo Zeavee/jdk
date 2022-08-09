@@ -205,8 +205,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitPrologue() {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
-        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff); // sd x8 sp(-32)
-        emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff); // sd x1 sp(-24)
+        emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -16 & 0xfff); // sd x8 sp(-16)
+        emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -8 & 0xfff); // sd x1 sp(-8)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
 
         setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
@@ -421,8 +421,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitIntRet(Register a) {
         emitMv(RISCV64.x10, a);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff);  // ld x1 40(sp)
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -16 & 0xfff);  // ld x8 -16(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -8 & 0xfff);  // ld x1 -8(sp)
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
@@ -430,8 +430,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitFloatRet(Register a) {
         assert a == RISCV64.f10 : "Unimplemented move " + a;
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
-        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff);  // ld x8 32(sp)
-        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff);  // ld x1 40(sp)
+        emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -16 & 0xfff);  // ld x8 -16(sp)
+        emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -8 & 0xfff);  // ld x1 -8(sp)
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
