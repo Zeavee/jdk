@@ -137,7 +137,7 @@ public class NativeCallTest extends CodeInstallationTest {
                 JavaType returnType = metaAccess.lookupJavaType(returnClazz);
                 CallingConvention cc = codeCache.getRegisterConfig().getCallingConvention(NativeCall, returnType, argTypes, asm.valueKindFactory);
                 asm.emitCallPrologue(cc, values);
-                asm.emitCall(0);
+                asm.emitCall(addr);
                 asm.emitCallEpilogue(cc);
                 asm.emitFloatRet(((RegisterValue) cc.getReturn()).getRegister());
             }, getMethod(name, types), values);
