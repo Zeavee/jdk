@@ -114,7 +114,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitShiftLeft(Register Rd, Register Rn, int shift) {
         // SLLI
-        code.emitInt(instructionImmediate(shift & 0x1f, Rn.encoding, 0b001, Rd.encoding, 0b0010011));
+        code.emitInt(instructionImmediate(shift & 0x3f, Rn.encoding, 0b001, Rd.encoding, 0b0010011));
     }
 
     private void emitLui(Register Rd, int imm20) {
@@ -268,10 +268,15 @@ public class RISCV64TestAssembler extends TestAssembler {
         }
     }
 
+    private void emitLoad31(Register ret, long addr) {
+        emitLui(ret, (int) ((addr >> 11) & 0xfffff));
+        emitAdd(ret, ret, (int) (addr & 0x7ff));
+    }
+
     private void emitMovPtrHelper(Register ret, long addr) {
         // 48-bit VA
         assert (addr >> 48) == 0 : "invalid pointer" + Long.toHexString(addr);
-        emitLoadPointer32(ret, (int) ((addr >> 17) & 0xffffffff));
+        emitLoad31(ret, (int) ((addr >> 17) & 0x7fffffff));
         emitShiftLeft(ret, ret, 11);
         emitAdd(ret, ret, (int) ((addr >> 6) & 0x7ff));
         emitShiftLeft(ret, ret, 6);
@@ -280,11 +285,6 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitLoadPointer48(Register ret, long addr) {
         emitMovPtrHelper(ret, addr);
         emitAdd(ret, ret, (int) (addr & 0x3f));
-    }
-
-    private void emitLoadPointer32(Register ret, long addr) {
-        emitLui(ret, (int) ((addr >> 12) & 0xfffff));
-        emitAdd(ret, ret, (int) (addr & 0xfff));
     }
 
     @Override
@@ -312,8 +312,8 @@ public class RISCV64TestAssembler extends TestAssembler {
         recordDataPatchInCode(ref);
 
         Register ret = newRegister();
-        emitAuipc(ret, 0xdead >> 12);
-        emitLoadRegister(ret, RISCV64Kind.DWORD, ret, 0xdead & 0xfff);
+        emitAuipc(ret, 0xdead >> 11);
+        emitLoadRegister(ret, RISCV64Kind.DWORD, ret, 0xdead & 0x7ff);
         return ret;
     }
 
@@ -322,8 +322,8 @@ public class RISCV64TestAssembler extends TestAssembler {
         recordDataPatchInCode(ref);
 
         Register ret = newRegister();
-        emitAuipc(ret, 0xdead >> 12);
-        emitLoadRegister(ret, RISCV64Kind.QWORD, ret, 0xdead & 0xfff);
+        emitAuipc(ret, 0xdead >> 11);
+        emitLoadRegister(ret, RISCV64Kind.QWORD, ret, 0xdead & 0x7ff);
         return ret;
     }
 
@@ -333,8 +333,8 @@ public class RISCV64TestAssembler extends TestAssembler {
         data.emitDouble(c);
 
         recordDataPatchInCode(ref);
-        emitAuipc(scratchRegister, 0xdead >> 12);
-        emitLoadRegister(scratchRegister, RISCV64Kind.QWORD, scratchRegister, 0xdead & 0xfff);
+        emitAuipc(scratchRegister, 0xdead >> 11);
+        emitLoadRegister(scratchRegister, RISCV64Kind.QWORD, scratchRegister, 0xdead & 0x7ff);
         emitFmv(reg, RISCV64Kind.DOUBLE, scratchRegister);
         return reg;
     }
@@ -345,8 +345,8 @@ public class RISCV64TestAssembler extends TestAssembler {
         data.emitFloat(c);
 
         recordDataPatchInCode(ref);
-        emitAuipc(scratchRegister, 0xdead >> 12);
-        emitLoadRegister(scratchRegister, RISCV64Kind.DWORD, scratchRegister, 0xdead & 0xfff);
+        emitAuipc(scratchRegister, 0xdead >> 11);
+        emitLoadRegister(scratchRegister, RISCV64Kind.DWORD, scratchRegister, 0xdead & 0x7ff);
         emitFmv(reg, RISCV64Kind.SINGLE, scratchRegister);
         return reg;
     }
@@ -359,12 +359,12 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private Register emitLoadLong(Register reg, long c) {
         emitLoadImmediate(reg, (int) ((c >> 32) & 0xffffffff));
-        emitShiftLeft(reg, reg, 12);
-        emitAdd(reg, reg, (int) ((c >> 20) & 0xfff));
-        emitShiftLeft(reg, reg, 12);
-        emitAdd(reg, reg, (int) ((c >> 8) & 0xfff));
-        emitShiftLeft(reg, reg, 8);
-        emitAdd(reg, reg, (int) (c & 0xff));
+        emitShiftLeft(reg, reg, 11);
+        emitAdd(reg, reg, (int) ((c >> 21) & 0x7ff));
+        emitShiftLeft(reg, reg, 11);
+        emitAdd(reg, reg, (int) ((c >> 10) & 0x7ff));
+        emitShiftLeft(reg, reg, 10);
+        emitAdd(reg, reg, (int) (c & 0x3ff));
         return reg;
     }
 
