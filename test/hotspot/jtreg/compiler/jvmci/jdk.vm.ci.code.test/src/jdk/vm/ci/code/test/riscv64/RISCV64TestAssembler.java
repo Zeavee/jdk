@@ -205,7 +205,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitPrologue() {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
-        emitAdd(RISCV64.x2, RISCV64.x2, -32 & 0xfff); // addi sp sp -32
+        emitAdd(RISCV64.x2, RISCV64.x2, -32); // addi sp sp -32
         emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 0); // sd x8 sp(0)
         emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8); // sd x1 sp(8)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
@@ -274,6 +274,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private void emitLoad31(Register ret, int addr) {
+        System.out.println(addr);
         emitLui(ret, (addr >> 11) & 0xfffff);
         emitAdd(ret, ret, addr & 0x7ff);
     }
