@@ -126,19 +126,18 @@ public class RISCV64TestAssembler extends TestAssembler {
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0110111, 6, 0));
     }
 
-    private void emitLuiUpper(Register Rd, int imm20) {
-        // LUI
-        code.emitInt(imm20 | f(Rd, 11, 7) | f(0b0110111, 6, 0));
-    }
-
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0010111, 6, 0));
     }
 
     private void emitLoadImmediate(Register Rd, int imm32) {
-        emitLui(Rd, (imm32 >> 12) & 0xfffff);
-        emitAddW(Rd, Rd, imm32 & 0xfff);
+        long upper = imm32, lower = imm32;
+        lower = (lower << 52) >> 52;
+        upper -= lower;
+        upper = (int) upper;
+        emitLui(Rd, (int) (upper >> 12));
+        emitAddW(Rd, Rd, (int) lower);
     }
 
     private void emitLoadRegister(Register Rd, RISCV64Kind kind, Register Rn, int offset) {
@@ -279,15 +278,11 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private void emitLoad31(Register ret, int addr) {
-        System.out.println("hey");
-        System.out.println(addr);
         long upper = addr, lower = addr;
         lower = (lower << 52) >> 52;
         upper -= lower;
         upper = (int) upper;
-        System.out.println(upper);
-        System.out.println(lower);
-        emitLuiUpper(ret, ((int) upper >> 12));
+        emitLui(ret, (int) (upper >> 12));
         emitAdd(ret, ret, (int) lower);
     }
 
