@@ -111,8 +111,8 @@ public class CodeInstallationTest {
                 System.out.println(str);
 
             if (DEBUG) {
-                String str = ((HotSpotCodeCacheProvider) codeCache).disassemble(installed);
-                System.out.println(str);
+                String str2 = ((HotSpotCodeCacheProvider) codeCache).disassemble(installed);
+                System.out.println(str2);
             }
 
             Object expected = method.invoke(null, args);
