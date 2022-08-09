@@ -126,6 +126,11 @@ public class RISCV64TestAssembler extends TestAssembler {
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0110111, 6, 0));
     }
 
+    private void emitLuiUpper(Register Rd, int imm20) {
+        // LUI
+        code.emitInt(imm20 | f(Rd, 11, 7) | f(0b0110111, 6, 0));
+    }
+
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0010111, 6, 0));
@@ -282,7 +287,7 @@ public class RISCV64TestAssembler extends TestAssembler {
         upper = (int) upper;
         System.out.println(upper);
         System.out.println(lower);
-        emitLui(ret, (int) upper);
+        emitLuiUpper(ret, ((int) upper >> 12));
         emitAdd(ret, ret, (int) lower);
     }
 
