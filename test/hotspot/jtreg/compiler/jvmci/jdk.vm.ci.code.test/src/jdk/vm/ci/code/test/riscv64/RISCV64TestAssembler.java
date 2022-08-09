@@ -282,7 +282,7 @@ public class RISCV64TestAssembler extends TestAssembler {
         upper = (int) upper;
         System.out.println(upper);
         System.out.println(lower);
-        emitLui(ret, upper);
+        emitLui(ret, (int) upper);
         emitAdd(ret, ret, (int) lower);
     }
 
