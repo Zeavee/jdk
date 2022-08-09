@@ -108,7 +108,7 @@ public class CodeInstallationTest {
             InstalledCode installed = codeCache.addCode(resolvedMethod, code, null, null);
 
             for (Byte b : installed.getCode()) {
-                System.out.println(b);
+                System.out.println(Integer.toHexString(b));
             }
 
             if (DEBUG) {
