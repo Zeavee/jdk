@@ -107,10 +107,6 @@ public class CodeInstallationTest {
             HotSpotCompiledCode code = asm.finish(resolvedMethod);
             InstalledCode installed = codeCache.addCode(resolvedMethod, code, null, null);
 
-            for (Byte b : installed.getCode()) {
-                System.out.println(Integer.toHexString(b));
-            }
-
             if (DEBUG) {
                 String str = ((HotSpotCodeCacheProvider) codeCache).disassemble(installed);
                 System.out.println(str);
