@@ -100,6 +100,7 @@ public class CodeInstallationTest {
             HotSpotResolvedJavaMethod resolvedMethod = (HotSpotResolvedJavaMethod) metaAccess.lookupJavaMethod(method);
             TestAssembler asm = createAssembler();
 
+            asm.emitCall(0);
             asm.emitPrologue();
             compiler.compile(asm);
             asm.emitEpilogue();
