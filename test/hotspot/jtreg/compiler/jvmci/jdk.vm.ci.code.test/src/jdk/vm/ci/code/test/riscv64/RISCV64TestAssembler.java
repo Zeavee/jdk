@@ -107,6 +107,10 @@ public class RISCV64TestAssembler extends TestAssembler {
         code.emitInt(instructionRegister(0b0100000, Rn.encoding, Rm.encoding, 0b000, Rd.encoding, 0b0110011));
     }
 
+    private void emitOr(Register Rd, Register Rn, int imm12) {
+        code.emitInt(instructionImmediate(imm12 & 0xfff, Rn.encoding, 0b110, Rd.encoding, 0b0010011));
+    }
+
     private void emitMv(Register Rd, Register Rn) {
         // MV
         code.emitInt(instructionRegister(0b0000000, Rn.encoding, 0, 0b000, Rd.encoding, 0b0110011));
@@ -201,6 +205,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitPrologue() {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
+        emitCall(0);
         emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, -32 & 0xfff); // sd x8 sp(-32)
         emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, -24 & 0xfff); // sd x1 sp(-24)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
@@ -359,12 +364,12 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private Register emitLoadLong(Register reg, long c) {
         emitLoadImmediate(reg, (int) ((c >> 32) & 0xffffffff));
-        emitShiftLeft(reg, reg, 11);
-        emitAdd(reg, reg, (int) ((c >> 21) & 0x7ff));
-        emitShiftLeft(reg, reg, 11);
-        emitAdd(reg, reg, (int) ((c >> 10) & 0x7ff));
-        emitShiftLeft(reg, reg, 10);
-        emitAdd(reg, reg, (int) (c & 0x3ff));
+        emitShiftLeft(reg, reg, 12);
+        emitOr(reg, reg, (int) ((c >> 20) & 0xfff));
+        emitShiftLeft(reg, reg, 12);
+        emitOr(reg, reg, (int) ((c >> 8) & 0xfff));
+        emitShiftLeft(reg, reg, 8);
+        emitOr(reg, reg, (int) (c & 0xff));
         return reg;
     }
 
