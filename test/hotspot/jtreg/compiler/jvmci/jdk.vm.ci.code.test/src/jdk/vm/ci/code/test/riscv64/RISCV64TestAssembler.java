@@ -274,9 +274,16 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private void emitLoad31(Register ret, int addr) {
+        System.out.println("hey");
         System.out.println(addr);
-        emitLui(ret, (addr >> 11) & 0xfffff);
-        emitAdd(ret, ret, addr & 0x7ff);
+        long upper = addr, lower = addr;
+        lower = (lower << 52) >> 52;
+        upper -= lower;
+        upper = (int) upper;
+        System.out.println(upper);
+        System.out.println(lower);
+        emitLui(ret, upper);
+        emitAdd(ret, ret, (int) lower);
     }
 
     private void emitMovPtrHelper(Register ret, long addr) {
