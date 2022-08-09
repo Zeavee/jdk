@@ -272,9 +272,9 @@ public class RISCV64TestAssembler extends TestAssembler {
         }
     }
 
-    private void emitLoad31(Register ret, long addr) {
-        emitLui(ret, (int) ((addr >> 11) & 0xfffff));
-        emitAdd(ret, ret, (int) (addr & 0x7ff));
+    private void emitLoad31(Register ret, int addr) {
+        emitLui(ret, (addr >> 11) & 0xfffff);
+        emitAdd(ret, ret, addr & 0x7ff);
     }
 
     private void emitMovPtrHelper(Register ret, long addr) {
