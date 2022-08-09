@@ -132,8 +132,8 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private void emitLoadImmediate(Register Rd, int imm32) {
-        emitLui(Rd, (imm32 >> 12) & 0xfffff);
-        emitAddW(Rd, Rd, imm32 & 0xfff);
+        emitLui(Rd, (imm32 >> 11) & 0xfffff);
+        emitAddW(Rd, Rd, imm32 & 0x7ff);
     }
 
     private void emitLoadRegister(Register Rd, RISCV64Kind kind, Register Rn, int offset) {
