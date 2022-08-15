@@ -2004,7 +2004,7 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ mvw(xcpool, (int32_t)Deoptimization::Unpack_reexecute);
     __ mv(c_rarg0, xthread);
-    __ mv(c_rarg2, xcpool); // exec mode
+    __ orrw(c_rarg2, zr, xcpool); // exec mode
     int32_t offset = 0;
     __ la_patchable(t0, RuntimeAddress(CAST_FROM_FN_PTR(address, Deoptimization::uncommon_trap)), offset);
     __ jalr(x1, t0, offset);
