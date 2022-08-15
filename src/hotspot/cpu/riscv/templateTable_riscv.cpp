@@ -2413,7 +2413,7 @@ void TemplateTable::getfield_or_static(int byte_no, bool is_static, RewriteContr
 
   if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()){
     Label notVolatile;
-    __ andi(t0, raw_flags, 1 << ConstantPoolCacheEntry::is_volatile_shift);
+    __ andi(t0, raw_flags, 1UL << ConstantPoolCacheEntry::is_volatile_shift);
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
@@ -3063,7 +3063,7 @@ void TemplateTable::fast_accessfield(TosState state)
 
   if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
     Label notVolatile;
-    __ andi(t0, x13, 1 << ConstantPoolCacheEntry::is_volatile_shift);
+    __ andi(t0, x13, 1UL << ConstantPoolCacheEntry::is_volatile_shift);
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
@@ -3124,7 +3124,7 @@ void TemplateTable::fast_xaccess(TosState state)
     Label notVolatile;
     __ lwu(x13, Address(x12, in_bytes(ConstantPoolCache::base_offset() +
                                      ConstantPoolCacheEntry::flags_offset())));
-    andi(t0, x13, 1 << ConstantPoolCacheEntry::is_volatile_shift);
+    andi(t0, x13, 1UL << ConstantPoolCacheEntry::is_volatile_shift);
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
