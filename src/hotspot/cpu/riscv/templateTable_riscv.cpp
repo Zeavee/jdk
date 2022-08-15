@@ -3064,7 +3064,7 @@ void TemplateTable::fast_accessfield(TosState state)
   if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
     Label notVolatile;
     __ andi(t0, x13, 1 << ConstantPoolCacheEntry::is_volatile_shift);
-    __ tbz(t0, notVolatile);
+    __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
   }
