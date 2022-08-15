@@ -2085,7 +2085,7 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
     }
 
     // Load class if necessary
-    if (unloaded_class_index >= 0) {
+    if (unloaded_class_index >= 0 && !nm->is_compiled_by_jvmci()) {
       constantPoolHandle constants(current, trap_method->constants());
       load_class_by_index(constants, unloaded_class_index, THREAD);
     }
