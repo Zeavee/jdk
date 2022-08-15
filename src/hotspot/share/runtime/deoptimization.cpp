@@ -2084,6 +2084,8 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
       fatal("missing receiver type check");
     }
 
+    fprintf(stderr, "This is index and this is compiled %d %d\n", unloaded_class_index, nm->is_compiled_by_jvmci());
+
     // Load class if necessary
     if (unloaded_class_index >= 0 && !nm->is_compiled_by_jvmci()) {
       constantPoolHandle constants(current, trap_method->constants());
