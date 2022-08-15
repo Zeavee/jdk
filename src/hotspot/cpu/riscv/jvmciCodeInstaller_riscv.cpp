@@ -98,12 +98,10 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
 }
 
 void CodeInstaller::pd_relocate_JavaMethod(CodeBuffer &cbuf, methodHandle& method, jint pc_offset, JVMCI_TRAPS) {
-  fprintf(stderr, "heyheyhey\n");
   Unimplemented();
 }
 
 void CodeInstaller::pd_relocate_poll(address pc, jint mark, JVMCI_TRAPS) {
-  fprintf(stderr, "heyheyhey\n");
   Unimplemented();
 }
 
