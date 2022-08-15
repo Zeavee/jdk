@@ -24,6 +24,10 @@
 
 package jdk.vm.ci.code.test.riscv64;
 
+import java.nio.channels.FileLockInterruptionException;
+
+import javax.swing.SizeSequence;
+
 import jdk.vm.ci.code.CallingConvention;
 import jdk.vm.ci.code.CodeCacheProvider;
 import jdk.vm.ci.code.DebugInfo;
@@ -242,6 +246,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitCall(long addr) {
+        System.out.println("This is addr: " + addr);
         emitMovPtrHelper(scratchRegister, addr);
         emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
     }
