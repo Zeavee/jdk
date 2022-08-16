@@ -46,7 +46,8 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
     return pc_offset + NativeJump::instruction_size;
   } else if (inst->is_movptr()) {
     fprintf(stderr, "it's a movptr\n");
-    return pc_offset + NativeMovConstReg::movptr_instruction_size;
+    return pc_offset + NativeInstruction::instruction_size;
+    //return pc_offset + NativeMovConstReg::movptr_instruction_size;
   } else {
     JVMCI_ERROR_0("unsupported type of instruction for call site");
   }
