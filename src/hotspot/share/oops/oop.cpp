@@ -106,7 +106,7 @@ intptr_t oopDesc::slow_identity_hash() {
 
 // used only for asserts and guarantees
 bool oopDesc::is_oop(oop obj, bool ignore_mark_word) {
-  fprintf(stderr, "This is first bool %d\n", !Universe::heap()->is_oop(obj));
+  fprintf(stderr, "Those are bools %d, %d, %d, %d\n", !Universe::heap()->is_oop(obj), ignore_mark_word, obj->mark().value() != 0, !SafepointSynchronize::is_at_safepoint());
   if (!Universe::heap()->is_oop(obj)) {
     return false;
   }
@@ -115,15 +115,12 @@ bool oopDesc::is_oop(oop obj, bool ignore_mark_word) {
   // at a safepoint, it must not be zero.
   // Outside of a safepoint, the header could be changing (for example,
   // another thread could be inflating a lock on this object).
-  fprintf(stderr, "This is second bool %d\n", ignore_mark_word);
   if (ignore_mark_word) {
     return true;
   }
-  fprintf(stderr, "This is third bool %d\n", obj->mark().value() != 0);
   if (obj->mark().value() != 0) {
     return true;
   }
-  fprintf(stderr, "This is fourth bool %d\n", !SafepointSynchronize::is_at_safepoint());
   return !SafepointSynchronize::is_at_safepoint();
 }
 
