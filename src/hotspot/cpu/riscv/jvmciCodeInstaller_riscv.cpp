@@ -39,10 +39,13 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
   fprintf(stderr, "pd_next_offset\n");
   address pc = (address) inst;
   if (inst->is_call()) {
+    fprintf(stderr, "it's a call\n");
     return pc_offset + NativeCall::instruction_size;
   } else if (inst->is_jump()) {
+    fprintf(stderr, "it's a jump\n");
     return pc_offset + NativeJump::instruction_size;
   } else if (inst->is_movptr()) {
+    fprintf(stderr, "it's a movptr\n");
     return pc_offset + NativeMovConstReg::movptr_instruction_size;
   } else {
     JVMCI_ERROR_0("unsupported type of instruction for call site");
@@ -86,10 +89,12 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
   fprintf(stderr, "pd_relocate_ForeignCall\n");
   address pc = (address) inst;
   if (inst->is_jal()) {
+    fprintf(stderr, "it's a jal\n");
     NativeCall* call = nativeCall_at(pc);
     call->set_destination((address) foreign_call_destination);
     _instructions->relocate(call->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_jump()) {
+    fprintf(stderr, "it's a jump\n");
     NativeJump* jump = nativeJump_at(pc);
     jump->set_jump_destination((address) foreign_call_destination);
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
