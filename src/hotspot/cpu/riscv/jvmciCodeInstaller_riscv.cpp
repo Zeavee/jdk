@@ -86,23 +86,23 @@ void CodeInstaller::pd_patch_DataSectionReference(int pc_offset, int data_offset
 }
 
 void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong foreign_call_destination, JVMCI_TRAPS) {
-  fprintf(stderr, "pd_relocate_ForeignCall\n");
+  fprintf(stderr, "pd_relocate_ForeignCall: %ld\n", foreign_call_destination);
   address pc = (address) inst;
   if (inst->is_jal()) {
-    fprintf(stderr, "it's a jal\n");
     NativeCall* call = nativeCall_at(pc);
     call->set_destination((address) foreign_call_destination);
+    fprintf(stderr, "it's a jal %ld\n", call->instruction_address());
     _instructions->relocate(call->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_jump()) {
-    fprintf(stderr, "it's a jump\n");
     NativeJump* jump = nativeJump_at(pc);
     jump->set_jump_destination((address) foreign_call_destination);
+    fprintf(stderr, "it's a jump %ld\n", jump->instruction_address());
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_movptr()) {
-    fprintf(stderr, "it's a movptr\n");
     NativeMovConstReg* movptr = nativeMovConstReg_at(pc);
     MacroAssembler::pd_patch_instruction_size((address)inst,
                                               (address)foreign_call_destination);
+    fprintf(stderr, "it's a movptr, %ld\n", movptr->data());
     _instructions->relocate((address) movptr->data(), runtime_call_Relocation::spec());
 
   } else {
