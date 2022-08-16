@@ -1063,7 +1063,6 @@ C2V_VMENTRY_NULL(jobject, executeHotSpotNmethod, (JNIEnv* env, jobject, jobject 
     return JNIHandles::make_local(THREAD, result.get_oop());
   } else {
     jvalue *value = (jvalue *) result.get_value_addr();
-    fprintf(stderr, "This is res: %d\n", value->i);
     // Narrow the value down if required (Important on big endian machines)
     switch (jap.return_type()) {
       case T_BOOLEAN:
