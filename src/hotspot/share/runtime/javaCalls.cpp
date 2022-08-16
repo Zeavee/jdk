@@ -413,7 +413,7 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
           entry_point = method->adapter()->get_i2c_entry();
           fprintf(stderr, "hey1\n");
           ttyLocker ttyl;
-          method->print_code();
+          method->code()->print_code();
         }
       }
 #endif
