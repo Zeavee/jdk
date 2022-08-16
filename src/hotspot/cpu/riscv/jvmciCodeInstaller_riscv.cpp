@@ -36,6 +36,7 @@
 #include "vmreg_riscv.inline.hpp"
 
 jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMCI_TRAPS) {
+  fprintf(stderr, "pd_next_offset\n");
   address pc = (address) inst;
   if (inst->is_call()) {
     return pc_offset + NativeCall::instruction_size;
@@ -49,6 +50,7 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
 }
 
 void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compressed, JVMCI_TRAPS) {
+  fprintf(stderr, "pd_patch_OopConstant\n");
   address pc = _instructions->start() + pc_offset;
   jobject value = JNIHandles::make_local(obj());
   MacroAssembler::patch_oop(pc, cast_from_oop<address>(obj()));
@@ -58,6 +60,7 @@ void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compre
 }
 
 void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCodeStream* stream, u1 tag, JVMCI_TRAPS) {
+  fprintf(stderr, "pd_patch_MetaspaceConstant\n");
   address pc = _instructions->start() + pc_offset;
   if (tag == PATCH_NARROW_KLASS) {
     narrowKlass narrowOop = record_narrow_metadata_reference(_instructions, pc, stream, tag, JVMCI_CHECK);
@@ -72,6 +75,7 @@ void CodeInstaller::pd_patch_MetaspaceConstant(int pc_offset, HotSpotCompiledCod
 }
 
 void CodeInstaller::pd_patch_DataSectionReference(int pc_offset, int data_offset, JVMCI_TRAPS) {
+  fprintf(stderr, "pd_patch_DataSectionReference\n");
   address pc = _instructions->start() + pc_offset;
   address dest = _constants->start() + data_offset;
   _instructions->relocate(pc, section_word_Relocation::spec((address) dest, CodeBuffer::SECT_CONSTS));
@@ -79,6 +83,7 @@ void CodeInstaller::pd_patch_DataSectionReference(int pc_offset, int data_offset
 }
 
 void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong foreign_call_destination, JVMCI_TRAPS) {
+  fprintf(stderr, "pd_relocate_ForeignCall\n");
   address pc = (address) inst;
   if (inst->is_jal()) {
     NativeCall* call = nativeCall_at(pc);
@@ -107,6 +112,7 @@ void CodeInstaller::pd_relocate_poll(address pc, jint mark, JVMCI_TRAPS) {
 
 // convert JVMCI register indices (as used in oop maps) to HotSpot registers
 VMReg CodeInstaller::get_hotspot_reg(jint jvmci_reg, JVMCI_TRAPS) {
+  fprintf(stderr, "get_hotspot_reg\n");
   if (jvmci_reg < RegisterImpl::number_of_registers) {
     return as_Register(jvmci_reg)->as_VMReg();
   } else {
@@ -123,5 +129,6 @@ VMReg CodeInstaller::get_hotspot_reg(jint jvmci_reg, JVMCI_TRAPS) {
 }
 
 bool CodeInstaller::is_general_purpose_reg(VMReg hotspotRegister) {
+  fprintf(stderr, "is_general_purpose_reg\n");
   return !(hotspotRegister->is_FloatRegister() || hotspotRegister->is_VectorRegister());
 }
