@@ -2084,14 +2084,8 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
       fatal("missing receiver type check");
     }
 
-    int test = unloaded_class_index >= 0;
-
-    if (1 != 0) {
-      fprintf(stderr, "This is unloaded_class_index %d and this is condition %d and %d\n", unloaded_class_index, unloaded_class_index >= 0, test);
-    }
-
     // Load class if necessary
-    if (test) {
+    if (unloaded_class_index >= 0) {
       constantPoolHandle constants(current, trap_method->constants());
       load_class_by_index(constants, unloaded_class_index, THREAD);
     }
