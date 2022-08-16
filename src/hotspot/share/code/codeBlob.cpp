@@ -236,7 +236,7 @@ const ImmutableOopMap* CodeBlob::oop_map_for_return_address(address return_addre
 
 void CodeBlob::print_code() {
   ResourceMark m;
-  Disassembler::decode(this, tty);
+  Disassembler::decode(this, stderr);
 }
 
 //----------------------------------------------------------------------------------------------------
