@@ -427,7 +427,11 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
       );
 
       result = link.result();  // circumvent MS C++ 5.0 compiler bug (result is clobbered across call)
-      fprintf(stderr, "THis is val: %d\n", result->get_jint());
+#if INCLUDE_JVMCI
+      if (!alternative_target.is_null()) {
+        fprintf(stderr, "This is val: %d\n", result->get_jint());
+      }
+#endif
       // Preserve oop return value across possible gc points
       if (oop_result_flag) {
         thread->set_vm_result(result->get_oop());
