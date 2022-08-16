@@ -1871,6 +1871,10 @@ static void log_deopt(CompiledMethod* nm, Method* tm, intptr_t pc, frame& fr, in
   }
 }
 
+static void test(int index) {
+  fprintf(stderr, "This is index %d\n", index);
+}
+
 JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint trap_request)) {
   HandleMark hm(current);
 
@@ -2087,6 +2091,7 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
     // Load class if necessary
     if (unloaded_class_index >= 0) {
       constantPoolHandle constants(current, trap_method->constants());
+      test(unloaded_class_index);
       load_class_by_index(constants, unloaded_class_index, THREAD);
     }
 
