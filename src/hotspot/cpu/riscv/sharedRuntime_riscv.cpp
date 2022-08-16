@@ -56,9 +56,9 @@
 #include "adfiles/ad_riscv.hpp"
 #include "opto/runtime.hpp"
 #endif
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
 #include "jvmci/jvmciJavaClasses.hpp"
-#endif*/
+#endif
 
 #define __ masm->
 
@@ -213,9 +213,9 @@ void RegisterSaver::restore_live_registers(MacroAssembler* masm) {
 #ifdef COMPILER2
   __ pop_CPU_state(_save_vectors, Matcher::scalable_vector_reg_size(T_BYTE));
 #else
-/*#if !INCLUDE_JVMCI
+#if !INCLUDE_JVMCI
   assert(!_save_vectors, "vectors are generated only by C2 and JVMCI");
-#endif*/
+#endif
   __ pop_CPU_state(_save_vectors);
 #endif
   __ leave();
@@ -1907,11 +1907,11 @@ void SharedRuntime::generate_deopt_blob() {
   ResourceMark rm;
   // Setup code generation tools
   int pad = 0;
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     pad += 512; // Increase the buffer size when compiling for JVMCI
   }
-#endif*/
+#endif
   CodeBuffer buffer("deopt_blob", 2048 + pad, 1024);
   MacroAssembler* masm = new MacroAssembler(&buffer);
   int frame_size_in_words = -1;
@@ -1963,12 +1963,12 @@ void SharedRuntime::generate_deopt_blob() {
   __ j(cont);
 
   int reexecute_offset = __ pc() - start;
-/*#if INCLUDE_JVMCI && !defined(COMPILER1)
+#if INCLUDE_JVMCI && !defined(COMPILER1)
   if (EnableJVMCI && UseJVMCICompiler) {
     // JVMCI does not use this kind of deoptimization
     __ should_not_reach_here();
   }
-#endif*/
+#endif
 
   // Reexecute case
   // return address is the pc describes what bci to do re-execute at
@@ -1979,7 +1979,7 @@ void SharedRuntime::generate_deopt_blob() {
   __ mvw(xcpool, Deoptimization::Unpack_reexecute); // callee-saved
   __ j(cont);
 
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   Label after_fetch_unroll_info_call;
   int implicit_exception_uncommon_trap_offset = 0;
   int uncommon_trap_offset = 0;
@@ -2015,7 +2015,7 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ j(after_fetch_unroll_info_call);
   } // EnableJVMCI
-#endif // INCLUDE_JVMCI*/
+#endif // INCLUDE_JVMCI
 
   int exception_offset = __ pc() - start;
 
@@ -2110,11 +2110,11 @@ void SharedRuntime::generate_deopt_blob() {
 
   __ reset_last_Java_frame(false);
 
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     __ bind(after_fetch_unroll_info_call);
   }
-#endif*/
+#endif
 
   // Load UnrollBlock* into x15
   __ mv(x15, x10);
@@ -2271,12 +2271,12 @@ void SharedRuntime::generate_deopt_blob() {
   _deopt_blob = DeoptimizationBlob::create(&buffer, oop_maps, 0, exception_offset, reexecute_offset, frame_size_in_words);
   assert(_deopt_blob != NULL, "create deoptimization blob fail!");
   _deopt_blob->set_unpack_with_exception_in_tls_offset(exception_in_tls_offset);
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     _deopt_blob->set_uncommon_trap_offset(uncommon_trap_offset);
     _deopt_blob->set_implicit_exception_uncommon_trap_offset(implicit_exception_uncommon_trap_offset);
   }
-#endif*/
+#endif
 }
 
 // Number of stack slots between incoming argument block and the start of
