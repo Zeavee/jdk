@@ -106,7 +106,6 @@ intptr_t oopDesc::slow_identity_hash() {
 
 // used only for asserts and guarantees
 bool oopDesc::is_oop(oop obj, bool ignore_mark_word) {
-  fprintf(stderr, "Those are bools %d, %d, %d, %d\n", !Universe::heap()->is_oop(obj), ignore_mark_word, obj->mark().value() != 0, !SafepointSynchronize::is_at_safepoint());
   if (!Universe::heap()->is_oop(obj)) {
     return false;
   }
