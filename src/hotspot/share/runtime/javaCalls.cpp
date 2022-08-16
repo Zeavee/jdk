@@ -412,9 +412,8 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
           thread->set_jvmci_alternate_call_target(verified_entry_point);
           entry_point = method->adapter()->get_i2c_entry();
           fprintf(stderr, "hey1\n");
-          method->print();
-          fprintf(stderr, "hey2\n");
-          method->code()->print_code();
+          ttyLocker ttyl;
+          method->print_code();
         }
       }
 #endif
@@ -431,11 +430,6 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
       );
 
       result = link.result();  // circumvent MS C++ 5.0 compiler bug (result is clobbered across call)
-#if INCLUDE_JVMCI
-      if (!alternative_target.is_null()) {
-        fprintf(stderr, "This is val: %d\n", result->get_jint());
-      }
-#endif
       // Preserve oop return value across possible gc points
       if (oop_result_flag) {
         thread->set_vm_result(result->get_oop());
