@@ -429,6 +429,13 @@ public class RISCV64TestAssembler extends TestAssembler {
     @Override
     public void emitIntRet(Register a) {
         emitMv(RISCV64.x10, a);
+        emitMv(RISCV64.x11, a);
+        emitMv(RISCV64.x12, a);
+        emitMv(RISCV64.x13, a);
+        emitMv(RISCV64.x14, a);
+        emitMv(RISCV64.x15, a);
+        emitMv(RISCV64.x16, a);
+        emitMv(RISCV64.x17, a);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
         emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 0);  // ld x8 0(sp)
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8);  // ld x1 8(sp)

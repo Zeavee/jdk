@@ -411,9 +411,6 @@ void JavaCalls::call_helper(JavaValue* result, const methodHandle& method, JavaC
         if (verified_entry_point != NULL) {
           thread->set_jvmci_alternate_call_target(verified_entry_point);
           entry_point = method->adapter()->get_i2c_entry();
-          fprintf(stderr, "hey1\n");
-          ttyLocker ttyl;
-          method->code()->print_code();
         }
       }
 #endif
