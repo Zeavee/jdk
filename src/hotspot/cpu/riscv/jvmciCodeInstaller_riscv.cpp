@@ -91,12 +91,12 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
   if (inst->is_jal()) {
     NativeCall* call = nativeCall_at(pc);
     call->set_destination((address) foreign_call_destination);
-    fprintf(stderr, "it's a jal %ld\n", call->instruction_address());
+    fprintf(stderr, "it's a jal %p\n", call->instruction_address());
     _instructions->relocate(call->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_jump()) {
     NativeJump* jump = nativeJump_at(pc);
     jump->set_jump_destination((address) foreign_call_destination);
-    fprintf(stderr, "it's a jump %ld\n", jump->instruction_address());
+    fprintf(stderr, "it's a jump %p\n", jump->instruction_address());
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_movptr()) {
     NativeMovConstReg* movptr = nativeMovConstReg_at(pc);
