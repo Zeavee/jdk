@@ -100,8 +100,11 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_movptr()) {
     fprintf(stderr, "it's a movptr\n");
-    //MacroAssembler::pd_patch_instruction_size((address)inst,
-    //                                          (address)foreign_call_destination);
+    NativeMovConstReg* movptr = nativeMovConstReg_at(pc);
+    MacroAssembler::pd_patch_instruction_size((address)inst,
+                                              (address)foreign_call_destination);
+    _instructions->relocate(movptr->data(), runtime_call_Relocation::spec());
+
   } else {
     JVMCI_ERROR("unknown call or jump instruction at " PTR_FORMAT, p2i(pc));
   }
