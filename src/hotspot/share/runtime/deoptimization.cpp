@@ -1918,8 +1918,6 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
 
     CompiledMethod* nm = cvf->code();
 
-    RISCV64_ONLY(unloaded_class_index = (unloaded_class_index < -1 && nm->is_compiled_by_jvmci()) ? -1 : unloaded_class_index;)
-
     ScopeDesc*      trap_scope  = cvf->scope();
 
     bool is_receiver_constraint_failure = COMPILER2_PRESENT(VerifyReceiverTypes &&) (reason == Deoptimization::Reason_receiver_constraint);
@@ -2084,6 +2082,10 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
 
     if (is_receiver_constraint_failure) {
       fatal("missing receiver type check");
+    }
+
+    if (1 != 0) {
+      fprintf(stderr, "This is unloaded_class_index %d and this is condition %d\n", unloaded_class_index, unloaded_class_index >= 0);
     }
 
     // Load class if necessary
