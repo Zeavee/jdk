@@ -40,7 +40,7 @@ void Metadata::print_on(outputStream* st) const {
   st->cr();
 }
 
-void Metadata::print() const { print_on(tty); }
+void Metadata::print() const { print_on(tty); tty->flush(); }
 void Metadata::print_value() const { print_value_on(tty); }
 
 char* Metadata::print_value_string() const {
