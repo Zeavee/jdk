@@ -36,16 +36,12 @@
 #include "vmreg_riscv.inline.hpp"
 
 jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMCI_TRAPS) {
-  fprintf(stderr, "pd_next_offset\n");
   address pc = (address) inst;
   if (inst->is_call()) {
-    fprintf(stderr, "it's a call\n");
     return pc_offset + NativeCall::instruction_size;
   } else if (inst->is_jump()) {
-    fprintf(stderr, "it's a jump\n");
     return pc_offset + NativeJump::instruction_size;
   } else if (inst->is_movptr()) {
-    fprintf(stderr, "it's a movptr\n");
     return pc_offset + NativeMovConstReg::movptr_instruction_size;
   } else {
     JVMCI_ERROR_0("unsupported type of instruction for call site");
@@ -91,19 +87,16 @@ void CodeInstaller::pd_relocate_ForeignCall(NativeInstruction* inst, jlong forei
   if (inst->is_jal()) {
     NativeCall* call = nativeCall_at(pc);
     call->set_destination((address) foreign_call_destination);
-    fprintf(stderr, "it's a jal %p\n", call->instruction_address());
     _instructions->relocate(call->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_jump()) {
     NativeJump* jump = nativeJump_at(pc);
     jump->set_jump_destination((address) foreign_call_destination);
-    fprintf(stderr, "it's a jump %p\n", jump->instruction_address());
     _instructions->relocate(jump->instruction_address(), runtime_call_Relocation::spec());
   } else if (inst->is_movptr()) {
     NativeMovConstReg* movptr = nativeMovConstReg_at(pc);
     MacroAssembler::pd_patch_instruction_size((address)inst,
                                               (address)foreign_call_destination);
-    fprintf(stderr, "it's a movptr, %ld\n", movptr->data());
-    //_instructions->relocate((address) movptr->data(), runtime_call_Relocation::spec());
+    _instructions->relocate((address) movptr->instruction_address(), runtime_call_Relocation::spec());
 
   } else {
     JVMCI_ERROR("unknown call or jump instruction at " PTR_FORMAT, p2i(pc));
