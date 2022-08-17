@@ -1179,16 +1179,17 @@ static int patch_offset_in_pc_relative(address branch, int64_t offset) {
 }
 
 static int patch_addr_in_movptr(address branch, address target) {
+  intptr_t imm64 = (intptr_t) target;
   const int MOVPTR_INSTRUCTIONS_NUM = 6;                                         // lui + addi + slli + addi + slli + addi/jalr/load
-  int64_t imm = target >> 17;
+  int64_t imm = imm64 >> 17;
   int64_t upper = imm, lower = imm;
   lower = (lower << 52) >> 52;
   upper -= lower;
   upper = (int32_t)upper;
   Assembler::patch(branch + 0,  31, 12, upper);                                  // Lui.             target[48:29] + target[28] ==> branch[31:12]
   Assembler::patch(branch + 4,  31, 20, lower);                                  // Addi.            target[28:17] ==> branch[31:20]
-  Assembler::patch(branch + 12, 31, 20, (target >> 6) & 0x7ff);                  // Addi.            target[16: 6] ==> branch[31:20]
-  Assembler::patch(branch + 20, 31, 20, target & 0x3f);                          // Addi/Jalr/Load.  target[ 5: 0] ==> branch[31:20]
+  Assembler::patch(branch + 12, 31, 20, (imm64 >> 6) & 0x7ff);                  // Addi.            target[16: 6] ==> branch[31:20]
+  Assembler::patch(branch + 20, 31, 20, imm64 & 0x3f);                          // Addi/Jalr/Load.  target[ 5: 0] ==> branch[31:20]
   return MOVPTR_INSTRUCTIONS_NUM * NativeInstruction::instruction_size;
 }
 
