@@ -1987,7 +1987,7 @@ void SharedRuntime::generate_deopt_blob() {
   if (EnableJVMCI) {
     implicit_exception_uncommon_trap_offset = __ pc() - start;
 
-    __ ld(x1, Address(xthread, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
+    __ ld(ra, Address(xthread, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
     __ sd(zr, Address(xthread, in_bytes(JavaThread::jvmci_implicit_exception_pc_offset())));
 
     uncommon_trap_offset = __ pc() - start;
