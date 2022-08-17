@@ -27,6 +27,9 @@ import static jdk.vm.ci.riscv64.RISCV64.x1;
 import static jdk.vm.ci.riscv64.RISCV64.x2;
 import static jdk.vm.ci.riscv64.RISCV64.x3;
 import static jdk.vm.ci.riscv64.RISCV64.x4;
+import static jdk.vm.ci.riscv64.RISCV64.x5;
+import static jdk.vm.ci.riscv64.RISCV64.x6;
+import static jdk.vm.ci.riscv64.RISCV64.x7;
 import static jdk.vm.ci.riscv64.RISCV64.x8;
 import static jdk.vm.ci.riscv64.RISCV64.x10;
 import static jdk.vm.ci.riscv64.RISCV64.x11;
@@ -36,6 +39,7 @@ import static jdk.vm.ci.riscv64.RISCV64.x14;
 import static jdk.vm.ci.riscv64.RISCV64.x15;
 import static jdk.vm.ci.riscv64.RISCV64.x16;
 import static jdk.vm.ci.riscv64.RISCV64.x17;
+import static jdk.vm.ci.riscv64.RISCV64.x23;
 import static jdk.vm.ci.riscv64.RISCV64.x27;
 import static jdk.vm.ci.riscv64.RISCV64.f10;
 import static jdk.vm.ci.riscv64.RISCV64.f11;
@@ -118,9 +122,14 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
     public static final Register sp = x2;
     public static final Register gp = x3;
     public static final Register tp = x4;
+    public static final Register t0 = x5;
+    public static final Register t1 = x6;
+    public static final Register t2 = x7;
     public static final Register fp = x8;
+    public static final Register threadRegister = x23;
+    public static final Register heapBaseRegister = x27;
 
-    private static final RegisterArray reservedRegisters = new RegisterArray(zero, ra, sp, gp, tp, fp);
+    private static final RegisterArray reservedRegisters = new RegisterArray(zero, ra, sp, gp, tp, t0, t1, t2, fp);
 
     private static RegisterArray initAllocatable(Architecture arch, boolean reserveForHeapBase) {
         RegisterArray allRegisters = arch.getAvailableValueRegisters();
@@ -280,7 +289,7 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
 
     @Override
     public Register getFrameRegister() {
-        return x8;
+        return x2;
     }
 
     @Override
