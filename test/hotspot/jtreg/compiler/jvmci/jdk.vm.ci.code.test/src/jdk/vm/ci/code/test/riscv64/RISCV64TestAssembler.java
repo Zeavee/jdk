@@ -414,7 +414,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public Register emitIntAdd(Register a, Register b) {
-        //emitAdd(a, a, b);
+        emitAdd(a, a, b);
         return a;
     }
 
