@@ -45,8 +45,8 @@ import jdk.vm.ci.riscv64.RISCV64Kind;
 
 public class RISCV64TestAssembler extends TestAssembler {
 
-    private static final Register scratchRegister = RISCV64.x28;
-    private static final Register doubleScratch = RISCV64.f28;
+    private static final Register scratchRegister = RISCV64.x5;
+    private static final Register doubleScratch = RISCV64.f5;
 
     public RISCV64TestAssembler(CodeCacheProvider codeCache, TestHotSpotVMConfig config) {
         super(codeCache, config,
@@ -214,14 +214,14 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8); // sd x1 sp(8)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
 
-        //setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
+        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
     }
 
     @Override
     public void emitEpilogue() {
-        //recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
-        //recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
-        //emitCall(0xdeaddeaddeadL);
+        recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
+        recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
+        emitCall(0xdeaddeaddeadL);
     }
 
     @Override
@@ -433,6 +433,14 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 0);  // ld x8 0(sp)
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8);  // ld x1 8(sp)
         emitAdd(RISCV64.x2, RISCV64.x2, 32); // addi sp sp 32
+        emitAdd(RISCV64.x10, RISCV64.x0, 1);
+        emitAdd(RISCV64.x11, RISCV64.x0, 1);
+        emitAdd(RISCV64.x12, RISCV64.x0, 1);
+        emitAdd(RISCV64.x13, RISCV64.x0, 1);
+        emitAdd(RISCV64.x14, RISCV64.x0, 1);
+        emitAdd(RISCV64.x15, RISCV64.x0, 1);
+        emitAdd(RISCV64.x16, RISCV64.x0, 1);
+        emitAdd(RISCV64.x17, RISCV64.x0, 1);
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
