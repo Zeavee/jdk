@@ -109,7 +109,7 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
         return attributesMap.clone();
     }
 
-    private final RegisterArray javaGeneralParameterRegisters = new RegisterArray(x10, x11, x12, x13, x14, x15, x16, x17);
+    private final RegisterArray javaGeneralParameterRegisters = new RegisterArray(x11, x12, x13, x14, x15, x16, x17, x10);
     private final RegisterArray nativeGeneralParameterRegisters = new RegisterArray(x10, x11, x12, x13, x14, x15, x16, x17);
     private final RegisterArray fpParameterRegisters = new RegisterArray(f10, f11, f12, f13, f14, f15, f16, f17);
 
