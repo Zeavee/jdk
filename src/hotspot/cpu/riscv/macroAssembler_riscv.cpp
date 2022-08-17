@@ -1186,7 +1186,7 @@ static int patch_addr_in_movptr(address branch, address target) {
   lower = (lower << 52) >> 52;
   upper -= lower;
   upper = (int32_t)upper;
-  Assembler::patch(branch + 0,  31, 12, upper);                                  // Lui.             target[48:29] + target[28] ==> branch[31:12]
+  Assembler::patch(branch + 0,  31, 12, (upper >> 12));                                  // Lui.             target[48:29] + target[28] ==> branch[31:12]
   Assembler::patch(branch + 4,  31, 20, lower);                                  // Addi.            target[28:17] ==> branch[31:20]
   Assembler::patch(branch + 12, 31, 20, (imm64 >> 6) & 0x7ff);                  // Addi.            target[16: 6] ==> branch[31:20]
   Assembler::patch(branch + 20, 31, 20, imm64 & 0x3f);                          // Addi/Jalr/Load.  target[ 5: 0] ==> branch[31:20]
