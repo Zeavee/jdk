@@ -434,13 +434,13 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8);  // ld x1 8(sp)
         emitAdd(RISCV64.x2, RISCV64.x2, 32); // addi sp sp 32
         emitAdd(RISCV64.x10, RISCV64.x0, 1);
-        emitAdd(RISCV64.x11, RISCV64.x0, 1);
+        /*emitAdd(RISCV64.x11, RISCV64.x0, 1);
         emitAdd(RISCV64.x12, RISCV64.x0, 1);
         emitAdd(RISCV64.x13, RISCV64.x0, 1);
         emitAdd(RISCV64.x14, RISCV64.x0, 1);
         emitAdd(RISCV64.x15, RISCV64.x0, 1);
         emitAdd(RISCV64.x16, RISCV64.x0, 1);
-        emitAdd(RISCV64.x17, RISCV64.x0, 1);
+        emitAdd(RISCV64.x17, RISCV64.x0, 1);*/
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
