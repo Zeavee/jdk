@@ -219,9 +219,9 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     @Override
     public void emitEpilogue() {
-        recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
-        recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
-        emitCall(0xdeaddeaddeadL);
+        //recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
+        //recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
+        //emitCall(0xdeaddeaddeadL);
     }
 
     @Override
