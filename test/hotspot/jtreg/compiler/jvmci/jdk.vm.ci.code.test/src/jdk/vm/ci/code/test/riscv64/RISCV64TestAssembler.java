@@ -209,20 +209,19 @@ public class RISCV64TestAssembler extends TestAssembler {
     public void emitPrologue() {
         // Must be patchable by NativeJump::patch_verified_entry
         emitNop();
-        emitCall(0);
         emitAdd(RISCV64.x2, RISCV64.x2, -32); // addi sp sp -32
         emitStoreRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 0); // sd x8 sp(0)
         emitStoreRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8); // sd x1 sp(8)
         emitMv(RISCV64.x8, RISCV64.x2); // mv x8, x2
 
-        setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
+        //setDeoptRescueSlot(newStackSlot(RISCV64Kind.QWORD));
     }
 
     @Override
     public void emitEpilogue() {
-        recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
-        recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
-        emitCall(0xdeaddeaddeadL);
+        //recordMark(config.MARKID_DEOPT_HANDLER_ENTRY);
+        //recordCall(new HotSpotForeignCallTarget(config.handleDeoptStub), 6*4, true, null);
+        //emitCall(0xdeaddeaddeadL);
     }
 
     @Override
