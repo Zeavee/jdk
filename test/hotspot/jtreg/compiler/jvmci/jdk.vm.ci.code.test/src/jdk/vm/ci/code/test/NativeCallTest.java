@@ -83,8 +83,8 @@ public class NativeCallTest extends CodeInstallationTest {
         Object[] remainingArgs = new Object[]{
                         1.2345678F, float.class,
                         3.212434D, double.class,
-                        43921652, int.class,
-                        0xBEEFL, long.class,
+                        1, int.class,
+                        0x2L, long.class,
                         .31212333D, double.class,
                         8.7654321F, float.class
         };
