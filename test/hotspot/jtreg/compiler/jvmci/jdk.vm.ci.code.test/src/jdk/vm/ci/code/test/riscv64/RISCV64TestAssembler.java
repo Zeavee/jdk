@@ -107,10 +107,6 @@ public class RISCV64TestAssembler extends TestAssembler {
         code.emitInt(instructionRegister(0b0100000, Rn.encoding, Rm.encoding, 0b000, Rd.encoding, 0b0110011));
     }
 
-    private void emitOr(Register Rd, Register Rn, int imm12) {
-        code.emitInt(instructionImmediate(imm12 & 0xfff, Rn.encoding, 0b110, Rd.encoding, 0b0010011));
-    }
-
     private void emitMv(Register Rd, Register Rn) {
         // MV
         code.emitInt(instructionRegister(0b0000000, Rn.encoding, 0, 0b000, Rd.encoding, 0b0110011));
@@ -380,13 +376,15 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private Register emitLoadLong(Register reg, long c) {
-        emitLoadImmediate(reg, (int) ((c >> 32) & 0xffffffff));
-        emitShiftLeft(reg, reg, 11);
-        emitAdd(reg, reg, (int) ((c >> 21) & 0x7ff));
-        emitShiftLeft(reg, reg, 11);
-        emitOr(reg, reg, (int) ((c >> 10) & 0x7ff));
-        emitShiftLeft(reg, reg, 10);
-        emitOr(reg, reg, (int) (c & 0x3ff));
+        long lower = c & 0xffffffff;
+        lower = lower - ((lower << 44) >> 44);
+        emitLoad32(reg, (int) ((c >> 32) & 0xffffffff));
+        emitShiftLeft(reg, reg, 12);
+        emitAdd(reg, reg, (int) ((lower >> 20) & 0xfff));
+        emitShiftLeft(reg, reg, 12);
+        emitAdd(reg, reg, (int) ((c << 44) >> 52));
+        emitShiftLeft(reg, reg, 8);
+        emitAdd(reg, reg, (int) (c & 0xff));
         return reg;
     }
 
