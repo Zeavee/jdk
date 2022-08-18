@@ -1335,14 +1335,12 @@ int MacroAssembler::patch_oop(address insn_addr, address o) {
   // OOPs are either narrow (32 bits) or wide (48 bits).  We encode
   // narrow OOPs by setting the upper 16 bits in the first
   // instruction.
-  if (NativeInstruction::is_li32_at(insn_addr)) {
-    // Move narrow OOP
-    uint32_t n = CompressedOops::narrow_oop_value(cast_to_oop(o));
-    return patch_imm_in_li32(insn_addr, (int32_t)n);
-  } else if (NativeInstruction::is_movptr_at(insn_addr)) {
+  if (NativeInstruction::is_movptr_at(insn_addr)) {
     // Move wide OOP
     return patch_addr_in_movptr(insn_addr, o);
-  } else if (NativeInstruction::is_test_at(insn_addr)) {
+  } else if (NativeInstruction::is_li32_at(insn_addr) ||
+             NativeInstruction::is_test_at(insn_addr)) {
+    // Move narrow OOP
     uint32_t n = CompressedOops::narrow_oop_value(cast_to_oop(o));
     return patch_imm_in_li32(insn_addr, (int32_t)n);
   }
