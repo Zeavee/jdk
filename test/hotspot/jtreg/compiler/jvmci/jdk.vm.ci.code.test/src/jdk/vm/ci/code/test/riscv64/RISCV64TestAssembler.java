@@ -230,6 +230,7 @@ public class RISCV64TestAssembler extends TestAssembler {
         frameSize += cc.getStackSize();
         AllocatableValue[] args = cc.getArguments();
         for (int i = 0; i < args.length; i++) {
+            System.out.println("This is arg: " + args[i] + " and this is prim: " + prim[i]);
             emitLoad(args[i], prim[i]);
         }
     }
