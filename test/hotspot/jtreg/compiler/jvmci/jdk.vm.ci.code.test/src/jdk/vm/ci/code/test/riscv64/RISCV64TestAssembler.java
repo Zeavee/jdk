@@ -226,7 +226,6 @@ public class RISCV64TestAssembler extends TestAssembler {
         frameSize += cc.getStackSize();
         AllocatableValue[] args = cc.getArguments();
         for (int i = 0; i < args.length; i++) {
-            System.out.println("This is arg: " + args[i] + " and this is prim: " + prim[i]);
             emitLoad(args[i], prim[i]);
         }
     }
@@ -303,7 +302,8 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         if (c.isCompressed()) {
-            emitLoad32(ret, 0xdeaddead);
+            //emitLoad32(ret, 0xdeaddead);
+            emitLui(ret, (int) (0xdeaddead >> 12));
         } else {
             emitLoadPointer48(ret, 0xdeaddeaddeadL);
         }
