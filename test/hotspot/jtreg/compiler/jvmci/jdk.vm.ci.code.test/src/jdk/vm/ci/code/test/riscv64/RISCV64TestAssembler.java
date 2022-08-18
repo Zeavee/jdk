@@ -128,7 +128,6 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
-        System.out.println(imm20);
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0010111, 6, 0));
     }
 
