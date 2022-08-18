@@ -1342,6 +1342,9 @@ int MacroAssembler::patch_oop(address insn_addr, address o) {
   } else if (NativeInstruction::is_movptr_at(insn_addr)) {
     // Move wide OOP
     return patch_addr_in_movptr(insn_addr, o);
+  } else if (NativeInstruction::is_test_at(insn_addr)) {
+    uint32_t n = CompressedOops::narrow_oop_value(cast_to_oop(o));
+    return patch_imm_in_li32(insn_addr, (int32_t)n);
   }
   ShouldNotReachHere();
   return -1;
