@@ -1060,7 +1060,7 @@ C2V_VMENTRY_NULL(jobject, executeHotSpotNmethod, (JNIEnv* env, jobject, jobject 
   if (jap.return_type() == T_VOID) {
     return NULL;
   } else if (is_reference_type(jap.return_type())) {
-    fprintf(stderr, "This is first cond: %d. This is second: %d\n", !Universe::heap()->is_oop(obj), obj->mark().value() != 0);
+    fprintf(stderr, "This is first cond: %d. This is second: %d\n", !Universe::heap()->is_oop(result.get_oop()), result.get_oop()->mark().value() != 0);
     return JNIHandles::make_local(THREAD, result.get_oop());
   } else {
     jvalue *value = (jvalue *) result.get_value_addr();
