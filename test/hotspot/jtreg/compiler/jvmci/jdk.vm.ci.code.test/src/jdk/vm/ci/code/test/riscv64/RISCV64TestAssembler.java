@@ -128,6 +128,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitAuipc(Register Rd, int imm20) {
         // AUIPC
+        System.out.println(imm20);
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0010111, 6, 0));
     }
 
@@ -349,7 +350,11 @@ public class RISCV64TestAssembler extends TestAssembler {
         recordDataPatchInCode(ref);
         emitAuipc(scratchRegister, 0xdead >> 11);
         emitLoadRegister(scratchRegister, RISCV64Kind.QWORD, scratchRegister, 0xdead & 0x7ff);
-        emitFmv(reg, RISCV64Kind.DOUBLE, scratchRegister);
+        if (reg.getRegisterCategory().equals(RISCV64.FP)) {
+            emitFmv(reg, RISCV64Kind.DOUBLE, scratchRegister);
+        } else {
+            emitMv(reg, scratchRegister);
+        }
         return reg;
     }
 
@@ -361,7 +366,11 @@ public class RISCV64TestAssembler extends TestAssembler {
         recordDataPatchInCode(ref);
         emitAuipc(scratchRegister, 0xdead >> 11);
         emitLoadRegister(scratchRegister, RISCV64Kind.DWORD, scratchRegister, 0xdead & 0x7ff);
-        emitFmv(reg, RISCV64Kind.SINGLE, scratchRegister);
+        if (reg.getRegisterCategory().equals(RISCV64.FP)) {
+            emitFmv(reg, RISCV64Kind.SINGLE, scratchRegister);
+        } else {
+            emitMv(reg, scratchRegister);
+        }
         return reg;
     }
 

@@ -247,6 +247,9 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
                     if (currentFP < fpParameterRegisters.size()) {
                         Register register = fpParameterRegisters.get(currentFP++);
                         locations[i] = register.asValue(valueKindFactory.getValueKind(kind));
+                    } else if (currentGeneral < generalParameterRegisters.size()) {
+                        Register register = generalParameterRegisters.get(currentGeneral++);
+                        locations[i] = register.asValue(valueKindFactory.getValueKind(kind));
                     }
                     break;
                 default:
