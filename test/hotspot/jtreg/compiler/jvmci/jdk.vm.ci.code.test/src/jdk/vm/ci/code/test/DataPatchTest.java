@@ -60,7 +60,7 @@ public class DataPatchTest extends CodeInstallationTest {
         test(compiler, getMethod("getConstClass"));
     }
 
-    @Test
+    /*@Test
     public void testInlineObject() {
         test(asm -> {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
@@ -68,7 +68,7 @@ public class DataPatchTest extends CodeInstallationTest {
             Register ret = asm.emitLoadPointer(c);
             asm.emitPointerRet(ret);
         });
-    }
+    }*/
 
     @Test
     public void testInlineNarrowObject() {
@@ -77,12 +77,13 @@ public class DataPatchTest extends CodeInstallationTest {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
             HotSpotConstant c = (HotSpotConstant) constantReflection.asJavaClass(type);
             Register compressed = asm.emitLoadPointer((HotSpotConstant) c.compress());
+            System.out.println("This is base: " + config.narrowOopBase + "and this is shift: " + config.narrowOopShift);
             Register ret = asm.emitUncompressPointer(compressed, config.narrowOopBase, config.narrowOopShift);
             asm.emitPointerRet(ret);
         });
     }
 
-    @Test
+    /*@Test
     public void testDataSectionReference() {
         test(asm -> {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
@@ -155,5 +156,5 @@ public class DataPatchTest extends CodeInstallationTest {
             Register ret = asm.emitLoadPointer(asm.emitLoadPointer(klass, config.classMirrorHandleOffset), 0);
             asm.emitPointerRet(ret);
         });
-    }
+    }*/
 }
