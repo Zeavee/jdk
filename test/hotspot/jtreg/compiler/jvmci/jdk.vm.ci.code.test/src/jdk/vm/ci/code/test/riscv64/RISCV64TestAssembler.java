@@ -380,13 +380,14 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private Register emitLoadLong(Register reg, long c) {
+        System.out.println("This is long: " + c);
         emitLoadImmediate(reg, (int) ((c >> 32) & 0xffffffff));
-        emitShiftLeft(reg, reg, 12);
-        emitOr(reg, reg, (int) ((c >> 20) & 0xfff));
-        emitShiftLeft(reg, reg, 12);
-        emitOr(reg, reg, (int) ((c >> 8) & 0xfff));
-        emitShiftLeft(reg, reg, 8);
-        emitOr(reg, reg, (int) (c & 0xff));
+        emitShiftLeft(reg, reg, 11);
+        emitAdd(reg, reg, (int) ((c >> 21) & 0x7ff));
+        emitShiftLeft(reg, reg, 11);
+        emitOr(reg, reg, (int) ((c >> 10) & 0x7ff));
+        emitShiftLeft(reg, reg, 10);
+        emitOr(reg, reg, (int) (c & 0x3ff));
         return reg;
     }
 
