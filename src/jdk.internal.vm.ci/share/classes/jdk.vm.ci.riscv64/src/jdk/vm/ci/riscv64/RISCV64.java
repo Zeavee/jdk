@@ -226,7 +226,7 @@ public class RISCV64 extends Architecture {
     private final EnumSet<Flag> flags;
 
     public RISCV64(EnumSet<CPUFeature> features, EnumSet<Flag> flags) {
-        super("riscv64", RISCV64Kind.QWORD, ByteOrder.LITTLE_ENDIAN, true, allRegisters, 0, 0, 0);
+        super("riscv64", RISCV64Kind.QWORD, ByteOrder.LITTLE_ENDIAN, true, allRegisters, 0, 0, 8);
         this.features = features;
         this.flags = flags;
     }

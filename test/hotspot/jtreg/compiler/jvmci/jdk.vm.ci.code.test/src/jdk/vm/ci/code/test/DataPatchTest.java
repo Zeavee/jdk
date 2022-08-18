@@ -70,7 +70,7 @@ public class DataPatchTest extends CodeInstallationTest {
         });
     }
 
-    @Test
+    /*@Test
     public void testInlineNarrowObject() {
         Assume.assumeTrue(config.useCompressedOops);
         test(asm -> {
@@ -155,5 +155,5 @@ public class DataPatchTest extends CodeInstallationTest {
             Register ret = asm.emitLoadPointer(asm.emitLoadPointer(klass, config.classMirrorHandleOffset), 0);
             asm.emitPointerRet(ret);
         });
-    }
+    }*/
 }
