@@ -64,7 +64,6 @@ jobject JNIHandles::make_local(JavaThread* thread, oop obj, AllocFailType alloc_
   if (obj == NULL) {
     return NULL;                // ignore null handles
   } else {
-    fprintf(stderr, "This is first cond: %d. This is second: %d\n", !Universe::heap()->is_oop(obj), obj->mark().value() != 0);
     assert(oopDesc::is_oop(obj), "not an oop");
     assert(!current_thread_in_native(), "must not be in native");
     return thread->active_handles()->allocate_handle(thread, obj, alloc_failmode);
