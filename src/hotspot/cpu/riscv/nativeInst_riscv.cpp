@@ -98,7 +98,7 @@ bool NativeInstruction::is_movptr_at(address instr) {
 
 bool NativeInstruction::is_li32_at(address instr) {
   return is_lui_at(instr) && // lui
-         is_addiw_at(instr + instruction_size) && // addiw
+         (is_addiw_at(instr + instruction_size) || is_addi_at(instr + instruction_size)) && // addiw
          check_li32_data_dependency(instr);
 }
 
