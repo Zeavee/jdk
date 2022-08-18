@@ -56,7 +56,6 @@ import java.util.List;
 import java.util.Set;
 
 import jdk.vm.ci.riscv64.RISCV64;
-import jdk.vm.ci.riscv64.RISCV64.CPUFeature;
 import jdk.vm.ci.code.Architecture;
 import jdk.vm.ci.code.CallingConvention;
 import jdk.vm.ci.code.CallingConvention.Type;
@@ -143,7 +142,7 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
                 continue;
             }
             assert !(reg.equals(zero) || reg.equals(ra) || reg.equals(sp) || reg.equals(gp) || reg.equals(tp) || reg.equals(fp));
-            if (reserveForHeapBase && reg.equals(x27)) {
+            if (reserveForHeapBase && reg.equals(heapBaseRegister)) {
                 // skip heap base register
                 continue;
             }
@@ -157,6 +156,7 @@ public class RISCV64HotSpotRegisterConfig implements RegisterConfig {
 
     public RISCV64HotSpotRegisterConfig(TargetDescription target, boolean useCompressedOops, boolean linuxOs) {
         this(target, initAllocatable(target.arch, useCompressedOops));
+        assert callerSaved.size() >= allocatable.size();
     }
 
     public RISCV64HotSpotRegisterConfig(TargetDescription target, RegisterArray allocatable) {
