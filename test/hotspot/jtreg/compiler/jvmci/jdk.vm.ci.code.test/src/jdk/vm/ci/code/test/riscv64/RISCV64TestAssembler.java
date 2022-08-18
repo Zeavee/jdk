@@ -436,14 +436,9 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitJalr(RISCV64.x0, RISCV64.x1, 0);  // ret
     }
 
-    private void emitFmv(Register rd, Register rs1) {
-        code.emitInt(instructionRegister(0b0010001, rs1.encoding, rs1.encoding, 0b000, rd.encoding, 0b1010011));
-    }
-
     @Override
     public void emitFloatRet(Register a) {
         assert a == RISCV64.f10 : "Unimplemented move " + a;
-        emitFmv(RISCV64.f10, RISCV64.f11);
         emitMv(RISCV64.x2, RISCV64.x8);  // mv sp, x8
         emitLoadRegister(RISCV64.x8, RISCV64Kind.QWORD, RISCV64.x2, 0);  // ld x8 0(sp)
         emitLoadRegister(RISCV64.x1, RISCV64Kind.QWORD, RISCV64.x2, 8);  // ld x1 8(sp)
