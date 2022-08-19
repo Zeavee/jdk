@@ -64,7 +64,7 @@ public class MaxOopMapStackOffsetTest extends DebugInfoTest {
             //asm.growFrame(offset);
             //Register v = asm.emitLoadInt(0);
             //asm.emitIntToStack(v);
-            //values[0] = JavaConstant.forInt(42);
+            values[0] = JavaConstant.forInt(42);
             return null;
         };
         test(compiler, getMethod(name), 2, new Location[]{location}, new Location[1], new int[]{4}, JavaKind.Int);
