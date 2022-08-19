@@ -390,7 +390,6 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private Register emitLoadLong(Register reg, long c) {
-        System.out.println(reg + ": " + c);
         long lower = c & 0xffffffff;
         lower = lower - ((lower << 44) >> 44);
         emitLoad32(reg, (int) ((c >> 32) & 0xffffffff));
@@ -497,6 +496,14 @@ public class RISCV64TestAssembler extends TestAssembler {
         return compressed;
     }
 
+    private int getAdjustedOffset(StackSlot ret) {
+        if (ret.getRawOffset() < 0) {
+            return ret.getRawOffset() + 16;
+        } else {
+            return -(frameSize - ret.getRawOffset()) + 16;
+        }
+    }
+
     private StackSlot emitDoubleToStack(StackSlot slot, Register a) {
         emitStoreRegister(a, RISCV64Kind.DOUBLE, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
         return slot;
@@ -531,7 +538,7 @@ public class RISCV64TestAssembler extends TestAssembler {
     }
 
     private StackSlot emitLongToStack(StackSlot slot, Register a) {
-        emitStoreRegister(a, RISCV64Kind.QWORD, RISCV64.x2, slot.getOffset(frameSize) & 0xfff);
+        emitStoreRegister(a, RISCV64Kind.QWORD, RISCV64.x2, getAdjustedOffset(slot) & 0xfff);
         return slot;
     }
 
