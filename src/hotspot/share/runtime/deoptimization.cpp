@@ -1912,6 +1912,9 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
     int debug_id = trap_request_debug_id(trap_request);
 #endif
     jint unloaded_class_index = trap_request_index(trap_request); // CP idx or -1
+    if (unloaded_class_index < 0) {
+      unloaded_class_index = -1;
+    }
 
     vframe*  vf  = vframe::new_vframe(&fr, &reg_map, current);
     compiledVFrame* cvf = compiledVFrame::cast(vf);

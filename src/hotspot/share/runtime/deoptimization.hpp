@@ -342,7 +342,7 @@ class Deoptimization : AllStatic {
       return 0;
     }
   }
-  static jint trap_request_index(jint trap_request) {
+  static int trap_request_index(int trap_request) {
     if (trap_request < 0)
       return -1;
     else
