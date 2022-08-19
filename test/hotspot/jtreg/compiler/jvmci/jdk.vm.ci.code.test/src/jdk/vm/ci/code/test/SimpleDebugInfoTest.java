@@ -149,15 +149,15 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         testFloatInLocal(compiler);
     }
 
-    public static long longOnStack() {
+    */public static long longOnStack() {
         return 42;
     }
 
-    */private void testLongOnStack(DebugInfoCompiler compiler) {
+    private void testLongOnStack(DebugInfoCompiler compiler) {
         test(compiler, getMethod("longOnStack"), 3, JavaKind.Long, JavaKind.Illegal);
     }
 
-    public static long longInLocal() {
+    /*public static long longInLocal() {
         long local = 42;
         return local;
     }
@@ -198,7 +198,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
             return null;
         };
         testLongOnStack(compiler);
-        testLongInLocal(compiler);
+        //testLongInLocal(compiler);
     }
 
     public static Class<?> objectOnStack() {
