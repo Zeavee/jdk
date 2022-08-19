@@ -1343,14 +1343,6 @@ int MacroAssembler::patch_oop(address insn_addr, address o) {
     // Move narrow OOP
     uint32_t n = CompressedOops::narrow_oop_value(cast_to_oop(o));
     return patch_imm_in_li32(insn_addr, (int32_t)n);
-  } else if (NativeInstruction::is_addi_at(insn_addr)) {
-    uint32_t n = CompressedOops::narrow_oop_value(cast_to_oop(o));
-    int64_t upper = (intptr_t)(int32_t)n;
-    int32_t lower = (((int32_t)(int32_t)n) << 20) >> 20;
-    upper -= lower;
-    upper = (int32_t)upper;
-    Assembler::patch(insn_addr,  31, 20, lower & 0xfff);                         // Addiw.
-    return 4;
   }
   ShouldNotReachHere();
   return -1;

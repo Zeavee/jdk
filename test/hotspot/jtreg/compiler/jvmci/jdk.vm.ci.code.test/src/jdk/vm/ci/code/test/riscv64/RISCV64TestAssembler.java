@@ -302,13 +302,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         if (c.isCompressed()) {
-            //emitLoad32(ret, 0xdeaddead);
-            //emitLui(ret, (int) (0xdeaddead >> 12));
-            long upper = 0xdeaddead, lower = 0xdeaddead;
-            lower = (lower << 52) >> 52;
-            upper -= lower;
-            upper = (int) upper;
-            emitAdd(ret, ret, (int) lower);
+            emitLoad32(ret, 0xdeaddead);
         } else {
             emitLoadPointer48(ret, 0xdeaddeaddeadL);
         }
