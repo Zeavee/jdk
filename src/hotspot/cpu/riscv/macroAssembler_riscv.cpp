@@ -1349,7 +1349,7 @@ int MacroAssembler::patch_oop(address insn_addr, address o) {
     int32_t lower = (((int32_t)(int32_t)n) << 20) >> 20;
     upper -= lower;
     upper = (int32_t)upper;
-    Assembler::patch(branch + 4,  31, 20, lower & 0xfff);                         // Addiw.
+    Assembler::patch(insn_addr,  31, 20, lower & 0xfff);                         // Addiw.
     return 4;
   }
   ShouldNotReachHere();
