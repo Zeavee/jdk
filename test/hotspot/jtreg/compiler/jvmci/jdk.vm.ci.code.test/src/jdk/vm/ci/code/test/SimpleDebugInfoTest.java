@@ -68,7 +68,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         test(compiler, getMethod("intInLocal"), 3, JavaKind.Int);
     }
 
-    @Test
+    /*@Test
     public void testConstInt() {
         DebugInfoCompiler compiler = (asm, values) -> {
             values[0] = JavaConstant.forInt(42);
@@ -153,7 +153,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         return 42;
     }
 
-    private void testLongOnStack(DebugInfoCompiler compiler) {
+    */private void testLongOnStack(DebugInfoCompiler compiler) {
         test(compiler, getMethod("longOnStack"), 3, JavaKind.Long, JavaKind.Illegal);
     }
 
@@ -164,7 +164,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
 
     private void testLongInLocal(DebugInfoCompiler compiler) {
         test(compiler, getMethod("longInLocal"), 4, JavaKind.Long, JavaKind.Illegal);
-    }
+    }/*
 
     @Test
     public void testConstLong() {
@@ -187,7 +187,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         };
         testLongOnStack(compiler);
         testLongInLocal(compiler);
-    }
+    }*/
 
     @Test
     public void testStackLong() {
@@ -218,7 +218,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         test(compiler, getMethod("objectInLocal"), 3, JavaKind.Object);
     }
 
-    @Test
+    /*@Test
     public void testConstObject() {
         ResolvedJavaType type = metaAccess.lookupJavaType(objectOnStack());
         DebugInfoCompiler compiler = (asm, values) -> {
@@ -279,5 +279,5 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         };
         testObjectOnStack(compiler);
         testObjectInLocal(compiler);
-    }
+    }*/
 }
