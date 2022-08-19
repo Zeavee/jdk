@@ -342,7 +342,7 @@ class Deoptimization : AllStatic {
       return 0;
     }
   }
-  static int trap_request_index(int trap_request) {
+  static int __attribute__ ((noinline)) trap_request_index(int trap_request) {
     if (trap_request < 0)
       return -1;
     else
