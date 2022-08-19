@@ -51,7 +51,6 @@ jint CodeInstaller::pd_next_offset(NativeInstruction* inst, jint pc_offset, JVMC
 void CodeInstaller::pd_patch_OopConstant(int pc_offset, Handle& obj, bool compressed, JVMCI_TRAPS) {
   address pc = _instructions->start() + pc_offset;
   jobject value = JNIHandles::make_local(obj());
-  fprintf(stderr, "This is addr: %p\n", cast_from_oop<address>(obj()));
   MacroAssembler::patch_oop(pc, cast_from_oop<address>(obj()));
   int oop_index = _oop_recorder->find_index(value);
   RelocationHolder rspec = oop_Relocation::spec(oop_index);
