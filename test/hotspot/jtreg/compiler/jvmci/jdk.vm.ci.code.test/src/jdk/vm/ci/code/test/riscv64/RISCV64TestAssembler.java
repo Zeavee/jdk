@@ -109,7 +109,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
     private void emitMv(Register Rd, Register Rn) {
         // MV
-        code.emitInt(instructionRegister(0b0000000, Rn.encoding, 0, 0b000, Rd.encoding, 0b0110011));
+        code.emitInt(instructionRegister(0b0000000, 0, Rn.encoding, 0b000, Rd.encoding, 0b0110011));
     }
 
     private void emitShiftLeft(Register Rd, Register Rn, int shift) {
