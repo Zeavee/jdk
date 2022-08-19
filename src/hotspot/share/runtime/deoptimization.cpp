@@ -1872,10 +1872,6 @@ static void log_deopt(CompiledMethod* nm, Method* tm, intptr_t pc, frame& fr, in
 }
 
 JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint trap_request)) {
-  jint unloaded_class_index = trap_request_index(trap_request); // CP idx or -1
-  if (unloaded_class_index < 0) {
-    unloaded_class_index = -1;
-  }
   HandleMark hm(current);
 
   // uncommon_trap() is called at the beginning of the uncommon trap
@@ -1915,6 +1911,7 @@ JRT_ENTRY(void, Deoptimization::uncommon_trap_inner(JavaThread* current, jint tr
 #if INCLUDE_JVMCI
     int debug_id = trap_request_debug_id(trap_request);
 #endif
+    jint unloaded_class_index = trap_request_index(trap_request); // CP idx or -1
 
     vframe*  vf  = vframe::new_vframe(&fr, &reg_map, current);
     compiledVFrame* cvf = compiledVFrame::cast(vf);

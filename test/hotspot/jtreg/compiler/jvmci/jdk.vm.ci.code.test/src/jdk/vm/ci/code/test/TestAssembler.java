@@ -261,7 +261,6 @@ public abstract class TestAssembler {
     }
 
     protected void growFrame(int sizeInBytes) {
-        System.out.println("curStackSlot: " + curStackSlot + ", sizeInBytes: " + sizeInBytes + ", frameSize: " + frameSize);
         curStackSlot += sizeInBytes;
         if (curStackSlot > frameSize) {
             int newFrameSize = curStackSlot;

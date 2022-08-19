@@ -68,7 +68,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         test(compiler, getMethod("intInLocal"), 3, JavaKind.Int);
     }
 
-    /*@Test
+    @Test
     public void testConstInt() {
         DebugInfoCompiler compiler = (asm, values) -> {
             values[0] = JavaConstant.forInt(42);
@@ -149,7 +149,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         testFloatInLocal(compiler);
     }
 
-    */public static long longOnStack() {
+    public static long longOnStack() {
         return 42;
     }
 
@@ -157,14 +157,14 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         test(compiler, getMethod("longOnStack"), 3, JavaKind.Long, JavaKind.Illegal);
     }
 
-    /*public static long longInLocal() {
+    public static long longInLocal() {
         long local = 42;
         return local;
     }
 
     private void testLongInLocal(DebugInfoCompiler compiler) {
         test(compiler, getMethod("longInLocal"), 4, JavaKind.Long, JavaKind.Illegal);
-    }/*
+    }
 
     @Test
     public void testConstLong() {
@@ -187,7 +187,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         };
         testLongOnStack(compiler);
         testLongInLocal(compiler);
-    }*/
+    }
 
     @Test
     public void testStackLong() {
@@ -198,7 +198,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
             return null;
         };
         testLongOnStack(compiler);
-        //testLongInLocal(compiler);
+        testLongInLocal(compiler);
     }
 
     public static Class<?> objectOnStack() {
@@ -218,7 +218,7 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         test(compiler, getMethod("objectInLocal"), 3, JavaKind.Object);
     }
 
-    /*@Test
+    @Test
     public void testConstObject() {
         ResolvedJavaType type = metaAccess.lookupJavaType(objectOnStack());
         DebugInfoCompiler compiler = (asm, values) -> {
@@ -279,5 +279,5 @@ public class SimpleDebugInfoTest extends DebugInfoTest {
         };
         testObjectOnStack(compiler);
         testObjectInLocal(compiler);
-    }*/
+    }
 }
