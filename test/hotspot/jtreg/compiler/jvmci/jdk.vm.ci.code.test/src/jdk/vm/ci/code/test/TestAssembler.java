@@ -268,6 +268,7 @@ public abstract class TestAssembler {
             if (newFrameSize % stackAlignment != 0) {
                 newFrameSize += stackAlignment - (newFrameSize % stackAlignment);
             }
+            System.out.println(newFrameSize);
             emitGrowStack(newFrameSize - frameSize);
             frameSize = newFrameSize;
         }
