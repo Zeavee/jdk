@@ -60,7 +60,7 @@ public class DataPatchTest extends CodeInstallationTest {
         test(compiler, getMethod("getConstClass"));
     }
 
-    /*@Test
+    @Test
     public void testInlineObject() {
         test(asm -> {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
@@ -68,7 +68,7 @@ public class DataPatchTest extends CodeInstallationTest {
             Register ret = asm.emitLoadPointer(c);
             asm.emitPointerRet(ret);
         });
-    }*/
+    }
 
     @Test
     public void testInlineNarrowObject() {
@@ -83,7 +83,7 @@ public class DataPatchTest extends CodeInstallationTest {
         });
     }
 
-    /*@Test
+    @Test
     public void testDataSectionReference() {
         test(asm -> {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
@@ -156,5 +156,5 @@ public class DataPatchTest extends CodeInstallationTest {
             Register ret = asm.emitLoadPointer(asm.emitLoadPointer(klass, config.classMirrorHandleOffset), 0);
             asm.emitPointerRet(ret);
         });
-    }*/
+    }
 }

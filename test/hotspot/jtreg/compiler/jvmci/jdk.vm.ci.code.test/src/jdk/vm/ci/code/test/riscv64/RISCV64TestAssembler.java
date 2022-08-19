@@ -244,7 +244,10 @@ public class RISCV64TestAssembler extends TestAssembler {
     @Override
     public void emitCall(long addr) {
         emitMovPtrHelper(scratchRegister, addr);
-        emitJalr(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
+        emitAdd(RISCV64.x1, scratchRegister, (int) (addr & 0x3f));
+        emitShiftLeft(RISCV64.x1, RISCV64.x1, 16);
+        emitShiftRight(RISCV64.x1, RISCV64.x1, 16);
+        emitJalr(RISCV64.x1, RISCV64.x1, 0);
     }
 
     @Override
@@ -306,6 +309,9 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitLoadPointer48(Register ret, long addr) {
         emitMovPtrHelper(ret, addr);
         emitAdd(ret, ret, (int) (addr & 0x3f));
+        // Lui sign-extends the value, which we do not want
+        emitShiftLeft(ret, ret, 16);
+        emitShiftRight(ret, ret, 16);
     }
 
     @Override
