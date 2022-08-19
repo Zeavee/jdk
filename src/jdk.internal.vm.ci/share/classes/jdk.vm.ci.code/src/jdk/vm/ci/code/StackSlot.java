@@ -65,6 +65,7 @@ public final class StackSlot extends AllocatableValue {
      */
     public int getOffset(int totalFrameSize) {
         assert totalFrameSize > 0 || !addFrameSize;
+        System.out.println("offset: " + offset + ", addFrameSize: " + addFrameSize + ", totalFrameSize: " + totalFrameSize);
         int result = offset + (addFrameSize ? totalFrameSize : 0);
         assert result >= 0;
         return result;

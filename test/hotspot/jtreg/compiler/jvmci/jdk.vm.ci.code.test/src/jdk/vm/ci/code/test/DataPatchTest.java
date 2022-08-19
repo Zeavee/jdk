@@ -77,7 +77,6 @@ public class DataPatchTest extends CodeInstallationTest {
             ResolvedJavaType type = metaAccess.lookupJavaType(getConstClass());
             HotSpotConstant c = (HotSpotConstant) constantReflection.asJavaClass(type);
             Register compressed = asm.emitLoadPointer((HotSpotConstant) c.compress());
-            System.out.println("This is base: " + config.narrowOopBase + "and this is shift: " + config.narrowOopShift);
             Register ret = asm.emitUncompressPointer(compressed, config.narrowOopBase, config.narrowOopShift);
             asm.emitPointerRet(ret);
         });
