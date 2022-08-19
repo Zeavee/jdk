@@ -306,6 +306,9 @@ public class RISCV64TestAssembler extends TestAssembler {
     private void emitLoadPointer48(Register ret, long addr) {
         emitMovPtrHelper(ret, addr);
         emitAdd(ret, ret, (int) (addr & 0x3f));
+        // Lui sign-extends the value, which we do not want
+        emitShiftLeft(ret, ret, 16);
+        emitShiftRight(ret, ret, 16);
     }
 
     @Override
