@@ -335,6 +335,9 @@ public class RISCV64TestAssembler extends TestAssembler {
         Register ret = newRegister();
         emitAuipc(ret, 0xdead >> 11);
         emitLoadRegister(ret, RISCV64Kind.DWORD, ret, 0xdead & 0x7ff);
+        // The value is sign-extendsed, which we do not want
+        emitShiftLeft(ret, ret, 32);
+        emitShiftRight(ret, ret, 32);
         return ret;
     }
 
