@@ -117,6 +117,11 @@ public class RISCV64TestAssembler extends TestAssembler {
         code.emitInt(instructionImmediate(shift & 0x3f, Rn.encoding, 0b001, Rd.encoding, 0b0010011));
     }
 
+    private void emitShiftRight(Register Rd, Register Rn, int shift) {
+        // SRLI
+        code.emitInt(instructionImmediate(shift & 0x3f, Rn.encoding, 0b101, Rd.encoding, 0b0010011));
+    }
+
     private void emitLui(Register Rd, int imm20) {
         // LUI
         code.emitInt(f(imm20, 31, 12) | f(Rd, 11, 7) | f(0b0110111, 6, 0));
@@ -291,6 +296,13 @@ public class RISCV64TestAssembler extends TestAssembler {
         emitShiftLeft(ret, ret, 6);
     }
 
+    private void emitLoadPointer32(Register ret, int addr) {
+        emitLoadImmediate(ret, addr);
+        // Lui sign-extends the value, which we do not want
+        emitShiftLeft(ret, ret, 32);
+        emitShiftRight(ret, ret, 32);
+    }
+
     private void emitLoadPointer48(Register ret, long addr) {
         emitMovPtrHelper(ret, addr);
         emitAdd(ret, ret, (int) (addr & 0x3f));
@@ -302,7 +314,7 @@ public class RISCV64TestAssembler extends TestAssembler {
 
         Register ret = newRegister();
         if (c.isCompressed()) {
-            emitLoad32(ret, 0xdeaddead);
+            emitLoadPointer32(ret, 0xdeaddead);
         } else {
             emitLoadPointer48(ret, 0xdeaddeaddeadL);
         }

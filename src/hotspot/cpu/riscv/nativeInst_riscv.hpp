@@ -183,7 +183,6 @@ class NativeInstruction {
 
   static bool is_movptr_at(address instr);
   static bool is_li32_at(address instr);
-  static bool is_test_at(address instr);
   static bool is_li64_at(address instr);
   static bool is_pc_relative_at(address branch);
   static bool is_load_pc_relative_at(address branch);

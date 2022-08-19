@@ -102,12 +102,6 @@ bool NativeInstruction::is_li32_at(address instr) {
          check_li32_data_dependency(instr);
 }
 
-bool NativeInstruction::is_test_at(address instr) {
-  return is_lui_at(instr) && // lui
-         is_addi_at(instr + instruction_size) && // addi
-         check_li32_data_dependency(instr);
-}
-
 bool NativeInstruction::is_li64_at(address instr) {
   return is_lui_at(instr) && // lui
          is_addi_at(instr + instruction_size) && // addi
