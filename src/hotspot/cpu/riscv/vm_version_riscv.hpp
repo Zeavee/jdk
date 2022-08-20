@@ -33,7 +33,7 @@
 #include "utilities/sizes.hpp"
 
 class VM_Version : public Abstract_VM_Version {
-  friend class JVMCIVMStructs;
+  //friend class JVMCIVMStructs;
 #ifdef COMPILER2
 private:
   static void c2_initialize();

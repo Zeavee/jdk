@@ -415,12 +415,13 @@ frame frame::sender_for_interpreter_frame(RegisterMap* map) const {
   // This is the sp before any possible extension (adapter/locals).
   intptr_t* unextended_sp = interpreter_frame_sender_sp();
 
-#if COMPILER2_OR_JVMCI
+//#if COMPILER2_OR_JVMCI
+#ifdef COMPILER2
   assert(map != NULL, "map must be set");
   if (map->update_map()) {
     update_map_with_saved_link(map, (intptr_t**) addr_at(link_offset));
   }
-#endif // COMPILER2_OR_JVMCI
+#endif // COMPILER2 COMPILER2_OR_JVMCI
 
   return frame(sender_sp, unextended_sp, link(), sender_pc());
 }

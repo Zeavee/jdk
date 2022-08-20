@@ -2411,13 +2411,13 @@ void TemplateTable::getfield_or_static(int byte_no, bool is_static, RewriteContr
     pop_and_check_object(obj);
   }
 
-  if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()){
+  /*if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()){
     Label notVolatile;
     __ andi(t0, raw_flags, 1UL << ConstantPoolCacheEntry::is_volatile_shift);
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
-  }
+  }*/
 
   __ add(off, obj, off);
   const Address field(off);
@@ -3061,13 +3061,13 @@ void TemplateTable::fast_accessfield(TosState state)
   __ add(x11, x10, x11);
   const Address field(x11, 0);
 
-  if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
+  /*if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
     Label notVolatile;
     __ andi(t0, x13, 1UL << ConstantPoolCacheEntry::is_volatile_shift);
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
-  }
+  }*/
 
   // access field
   switch (bytecode()) {
@@ -3120,7 +3120,7 @@ void TemplateTable::fast_xaccess(TosState state)
   __ ld(x11, Address(x12, in_bytes(ConstantPoolCache::base_offset() +
                                    ConstantPoolCacheEntry::f2_offset())));
 
-  if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
+  /*if (!CompilerConfig::is_c1_or_interpreter_only_no_jvmci()) {
     Label notVolatile;
     __ lwu(x13, Address(x12, in_bytes(ConstantPoolCache::base_offset() +
                                      ConstantPoolCacheEntry::flags_offset())));
@@ -3128,7 +3128,7 @@ void TemplateTable::fast_xaccess(TosState state)
     __ beqz(t0, notVolatile);
     __ membar(MacroAssembler::AnyAny);
     __ bind(notVolatile);
-  }
+  }*/
 
   // make sure exception is reported in correct bcp range (getfield is
   // next instruction)
