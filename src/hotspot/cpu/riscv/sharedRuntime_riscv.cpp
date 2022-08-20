@@ -1979,7 +1979,7 @@ void SharedRuntime::generate_deopt_blob() {
   __ mvw(xcpool, Deoptimization::Unpack_reexecute); // callee-saved
   __ j(cont);
 
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   Label after_fetch_unroll_info_call;
   int implicit_exception_uncommon_trap_offset = 0;
   int uncommon_trap_offset = 0;
@@ -2015,7 +2015,7 @@ void SharedRuntime::generate_deopt_blob() {
 
     __ j(after_fetch_unroll_info_call);
   } // EnableJVMCI
-#endif // INCLUDE_JVMCI*/
+#endif // INCLUDE_JVMCI
 
   int exception_offset = __ pc() - start;
 
