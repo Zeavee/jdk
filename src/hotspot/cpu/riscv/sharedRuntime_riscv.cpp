@@ -2110,11 +2110,11 @@ void SharedRuntime::generate_deopt_blob() {
 
   __ reset_last_Java_frame(false);
 
-/*#if INCLUDE_JVMCI
+#if INCLUDE_JVMCI
   if (EnableJVMCI) {
     __ bind(after_fetch_unroll_info_call);
   }
-#endif*/
+#endif
 
   // Load UnrollBlock* into x15
   __ mv(x15, x10);
